@@ -21,8 +21,26 @@ import eventRoutes from './routes/eventRoutes';
 
 const app = express();
 
-// Middleware
-app.use(cors());
+// CORS — in production, restrict to your frontend Azure Web App URL.
+// Set ALLOWED_ORIGINS in Azure App Settings (comma-separated list of allowed origins).
+// Example: https://your-frontend-app.azurewebsites.net,https://yourdomain.com
+const allowedOrigins = process.env.ALLOWED_ORIGINS
+  ? process.env.ALLOWED_ORIGINS.split(',').map((o) => o.trim())
+  : ['http://localhost:3000', 'http://localhost:3001'];
+
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      // Allow requests with no origin (mobile apps, curl, Postman)
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+      return callback(new Error(`CORS: Origin '${origin}' not allowed`));
+    },
+    credentials: true,
+  })
+);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 // Serve static files from root uploads directory
