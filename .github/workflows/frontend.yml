@@ -1,0 +1,48 @@
+name: Deploy Frontend
+
+on:
+push:
+branches:
+- main
+
+jobs:
+build-and-deploy:
+runs-on: ubuntu-latest
+
+```
+permissions:
+  id-token: write
+  contents: read
+
+steps:
+  - name: Checkout
+    uses: actions/checkout@v4
+
+  - name: Setup Node
+    uses: actions/setup-node@v4
+    with:
+      node-version: 22
+
+  - name: Install Frontend Dependencies
+    run: |
+      cd frontend
+      npm install
+
+  - name: Build Frontend
+    run: |
+      cd frontend
+      npm run build
+
+  - name: Azure Login
+    uses: azure/login@v2
+    with:
+      client-id: ${{ secrets.FRONTEND_CLIENT_ID }}
+      tenant-id: ${{ secrets.FRONTEND_TENANT_ID }}
+      subscription-id: ${{ secrets.FRONTEND_SUBSCRIPTION_ID }}
+
+  - name: Deploy Frontend
+    uses: azure/webapps-deploy@v3
+    with:
+      app-name: mmport-web
+      package: ./frontend
+```
