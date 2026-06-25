@@ -9,6 +9,13 @@ const formatDate = (value) => {
   return Number.isNaN(date.getTime()) ? "Date not available" : date.toLocaleDateString();
 };
 
+const resolveUrl = (url) => {
+  if (!url) return '';
+  if (url.startsWith('http')) return url;
+  if (url.startsWith('/uploads')) return `https://mmport-b2fzejc8h9cwfffb.centralindia-01.azurewebsites.net${url}`;
+  return url;
+};
+
 const Certificates = () => {
   const [certificates, setCertificates] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -71,7 +78,7 @@ const Certificates = () => {
               <article key={certificate._id} className="cert-card">
                 <div className="cert-card__media">
                   <img
-                    src={certificate.imageUrl}
+                    src={resolveUrl(certificate.imageUrl)}
                     alt={certificate.title}
                     className="cert-card__image"
                     loading="lazy"
@@ -114,7 +121,7 @@ const Certificates = () => {
                   <div className="cert-card__actions">
                     {certificate.pdfUrl ? (
                       <a
-                        href={certificate.pdfUrl}
+                        href={resolveUrl(certificate.pdfUrl)}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="cert-card__button cert-card__button--primary"
@@ -128,7 +135,7 @@ const Certificates = () => {
                     )}
 
                     <a
-                      href={certificate.imageUrl}
+                      href={resolveUrl(certificate.imageUrl)}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="cert-card__button cert-card__button--secondary"
