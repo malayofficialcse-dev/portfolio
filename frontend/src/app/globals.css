@@ -1,0 +1,216 @@
+@import "tailwindcss";
+
+@theme {
+  --font-inter: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-playfair: "Playfair Display", serif;
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-primary: var(--primary);
+  --color-secondary: var(--secondary);
+  --color-accent: var(--accent);
+  --color-muted: var(--muted);
+  --color-border: var(--border);
+
+  --animate-gradient-slow: gradient-shift 8s ease infinite;
+  --animate-scroll: scroll 40s linear infinite;
+
+  @keyframes gradient-shift {
+    0%,
+    100% {
+      background-position: 0% 50%;
+    }
+
+    50% {
+      background-position: 100% 50%;
+    }
+  }
+
+  @keyframes scroll {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
+}
+
+@layer base {
+  :root {
+    --background: #ffffff;
+    --foreground: #020617;
+    --card: #f8fafc;
+    --card-foreground: #020617;
+    --primary: #00baff;
+    --primary-foreground: #ffffff;
+    --secondary: #3b82f6;
+    --accent: #00baff;
+    --muted: #f1f5f9;
+    --border: #e2e8f0;
+    --success: #10b981;
+    --warning: #f59e0b;
+    --error: #ef4444;
+  }
+
+  .dark {
+    --background: #020408;
+    --foreground: #f1f5f9;
+    --card: #0a0c12;
+    --card-foreground: #f1f5f9;
+    --primary: #00baff;
+    --primary-foreground: #ffffff;
+    --secondary: #4f46e5;
+    --accent: #00baff;
+    --muted: #111827;
+    --border: #1e293b;
+    --success: #00ff88;
+    --warning: #f59e0b;
+    --error: #ff4444;
+  }
+}
+
+@layer utilities {
+  .glass-effect {
+    background-color: color-mix(in srgb, var(--background), transparent 40%);
+    backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid color-mix(in srgb, var(--foreground), transparent 90%);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.05);
+  }
+
+  .mesh-gradient {
+    background-image:
+      radial-gradient(
+        at 0% 0%,
+        color-mix(in srgb, var(--primary), transparent 80%) 0,
+        transparent 50%
+      ),
+      radial-gradient(
+        at 100% 0%,
+        color-mix(in srgb, var(--secondary), transparent 80%) 0,
+        transparent 50%
+      ),
+      radial-gradient(
+        at 100% 100%,
+        color-mix(in srgb, var(--primary), transparent 80%) 0,
+        transparent 50%
+      ),
+      radial-gradient(
+        at 0% 100%,
+        color-mix(in srgb, var(--secondary), transparent 80%) 0,
+        transparent 50%
+      );
+  }
+
+  .noise-bg {
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3%3Cfilter id='noiseFilter'%3%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3%3C/filter%3%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3%3C/svg%3");
+    opacity: 0.03;
+    pointer-events: none;
+  }
+
+  .gradient-text {
+    background: linear-gradient(
+      135deg,
+      var(--primary) 0%,
+      var(--secondary) 100%
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .premium-card {
+    background: color-mix(in srgb, var(--card), transparent 20%);
+    backdrop-filter: blur(10px);
+    border: 1px solid color-mix(in srgb, var(--foreground), transparent 95%);
+    border-radius: 2px;
+    padding: 2.5rem;
+    transition: all 600ms cubic-bezier(0.23, 1, 0.32, 1);
+  }
+
+  .premium-card:hover {
+    transform: translateY(-8px) scale(1.01);
+    border-color: color-mix(in srgb, var(--primary), transparent 70%);
+    box-shadow:
+      0 30px 60px -12px rgba(0, 0, 0, 0.1),
+      0 18px 36px -18px rgba(0, 0, 0, 0.1),
+      0 0 0 1px color-mix(in srgb, var(--primary), transparent 90%);
+  }
+
+  .text-glow {
+    text-shadow: 0 0 20px color-mix(in srgb, var(--primary), transparent 50%);
+  }
+
+  .hover-lift {
+    transition: all 400ms cubic-bezier(0.23, 1, 0.32, 1);
+  }
+
+  .hover-lift:hover {
+    transform: translateY(-10px);
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .mask-gradient-y {
+    mask-image: linear-gradient(
+      to bottom,
+      transparent,
+      black 20%,
+      black 80%,
+      transparent
+    );
+    -webkit-mask-image: linear-gradient(
+      to bottom,
+      transparent,
+      black 20%,
+      black 80%,
+      transparent
+    );
+  }
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition:
+    background-color 500ms ease,
+    color 500ms ease;
+  overflow-x: hidden;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  font-weight: 950;
+  letter-spacing: -0.05em;
+  line-height: 0.9;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--background);
+}
+
+::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, var(--foreground), transparent 80%);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: color-mix(in srgb, var(--foreground), transparent 60%);
+}
