@@ -221,7 +221,7 @@ export function Home() {
   // };
 
 
-  const glassCard = {
+  const glassCard: React.CSSProperties = {
     position: "absolute",
     width: "125px",
     height: "125px",
@@ -313,9 +313,9 @@ opacity:.15;
 
 }
 `;
-  const heroRef = React.useRef(null);
+  const heroRef = React.useRef<HTMLDivElement>(null);
 
-  const handleMouseMove = (e) => {
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!heroRef.current) return;
 
     const rect = heroRef.current.getBoundingClientRect();
