@@ -1,24 +1,46 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import React from 'react';
+import {
+  SiPython,
+  SiMysql,
+
+} from "react-icons/si";
+
+import { FaJava } from "react-icons/fa";
 import {
   FaGithub,
   FaLinkedin,
   FaDocker,
+  FaMicrosoft
 } from "react-icons/fa";
-import {
-  SiDocker,
-  SiKubernetes,
-  SiTerraform,
-  SiRedis,
-  SiApachekafka
-} from "react-icons/si";
+// import {
+//   SiDocker,
+//   SiKubernetes,
+//   SiTerraform,
+//   SiRedis,
+//   SiApachekafka
+// } from "react-icons/si";
 import {
   SiGooglescholar,
   SiResearchgate,
   SiOrcid,
   SiLeetcode,
   SiGeeksforgeeks,
+} from "react-icons/si";
+import {
+  SiMongodb,
+  SiDocker,
+  SiKubernetes,
+
+  SiTerraform,
+  SiReact,
+  SiNodedotjs,
+  SiGithub,
+  SiGit,
+  SiLinux,
+  SiTypescript,
 } from "react-icons/si";
 
 /* ─── Type definitions ──────────────────────────────────────────── */
@@ -179,6 +201,130 @@ const quickLinks = [
 ═══════════════════════════════════════════════════════════════ */
 
 export function Home() {
+
+  // const glassCard = {
+  //   position: "absolute",
+  //   width: "120px",
+  //   height: "120px",
+  //   borderRadius: "30px",
+  //   background: "rgba(255,255,255,.45)",
+  //   backdropFilter: "blur(18px)",
+  //   WebkitBackdropFilter: "blur(18px)",
+  //   border: "1px solid rgba(255,255,255,.55)",
+  //   display: "flex",
+  //   justifyContent: "center",
+  //   alignItems: "center",
+  //   boxShadow:
+  //     "0 15px 40px rgba(0,0,0,.08), inset 0 1px 1px rgba(255,255,255,.5)",
+  //   transition: ".45s",
+  //   cursor: "pointer",
+  // };
+
+
+  const glassCard = {
+    position: "absolute",
+    width: "125px",
+    height: "125px",
+    
+    background:
+      "linear-gradient(180deg, rgba(255,255,255,.72), rgba(255,255,255,.42))",
+    backdropFilter: "blur(22px)",
+    WebkitBackdropFilter: "blur(22px)",
+    
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    boxShadow:
+      "0 18px 45px rgba(0,0,0,.10), inset 0 2px 2px rgba(255,255,255,.6)",
+    transition: ".45s ease",
+    cursor: "pointer",
+  };
+
+  // const floatAnimation = `
+  // @keyframes float{
+  // 0%{transform:translateY(0px) rotate(0deg);}
+  // 50%{transform:translateY(-18px) rotate(2deg);}
+  // 100%{transform:translateY(0px) rotate(0deg);}
+  // }
+
+  // @keyframes glow{
+  // 0%{opacity:.25;}
+  // 50%{opacity:.55;}
+  // 100%{opacity:.25;}
+  // }
+  // `;
+
+
+  const floatAnimation = `
+
+@keyframes float{
+
+0%{
+
+transform:translateY(0px) rotate(0deg);
+
+}
+
+25%{
+
+transform:translateY(-8px) rotate(2deg);
+
+}
+
+50%{
+
+transform:translateY(-16px) rotate(-2deg);
+
+}
+
+75%{
+
+transform:translateY(-8px) rotate(1deg);
+
+}
+
+100%{
+
+transform:translateY(0px) rotate(0deg);
+
+}
+
+}
+
+@keyframes glow{
+
+0%{
+
+opacity:.15;
+
+}
+
+50%{
+
+opacity:.4;
+
+}
+
+100%{
+
+opacity:.15;
+
+}
+
+}
+`;
+  const heroRef = React.useRef(null);
+
+  const handleMouseMove = (e) => {
+    if (!heroRef.current) return;
+
+    const rect = heroRef.current.getBoundingClientRect();
+
+    const x = (e.clientX - rect.left) / rect.width;
+    const y = (e.clientY - rect.top) / rect.height;
+
+    heroRef.current.style.backgroundPosition = `${50 + x * 6}% ${50 + y * 6}%`;
+  };
   /* profile */
   const [profile, setProfile] = useState<ProfileData | null>(null);
   const [profileLoading, setProfileLoading] = useState(true);
@@ -247,10 +393,10 @@ export function Home() {
       light: true,
     },
     {
-      eyebrow: 'Open to opportunities',
-      heading: 'Let\'s build something great.',
+      eyebrow: 'Malay Maity',
+      heading: 'Full Stack Software Engineer',
       sub: profile?.location ?? 'Kolkata, West Bengal',
-      body: 'Full-stack engineer with a passion for clean code, great UX, and scalable architecture. Available for full-time roles and freelance projects.',
+      body: 'Building scalable web applications using React, Node.js, Azure and Kubernetes.Researcher • Open Source Contributor • Cloud Enthusiast',
       cta: { label: 'Get in touch', to: profile?.email ? (`mailto:${profile.email}` as any) : '/admin/login' },
       ctaAlt: { label: 'Explore skills', to: '/skills' },
       bg: 'linear-gradient(135deg, #eef3f8 0%, #e6edf5 40%, #dde8f0 100%)',
@@ -268,6 +414,8 @@ export function Home() {
       </div>
     );
   }
+
+
 
   const resolveUrl = (url?: string) => {
     if (!url) return '';
@@ -389,17 +537,23 @@ export function Home() {
       </section>
 
       {/* ══════════ QUICK NAV ══════════ */}
-      <section className="ms-quick">
-        <div className="ms-quick__inner">
-          {quickLinks.map(item => (
-            <Link key={item.to} to={item.to} className="ms-quick__item">
-              <span className="ms-quick__icon">{item.icon}</span>
-              {/* <span className="ms-quick__label">{item.label}</span> */}
-              <span className="ms-quick__subtitle">{item.text}</span>
-            </Link>
-          ))}
-        </div>
-      </section>
+      
+
+      <style>{floatAnimation}</style>
+
+      {/* <div
+  style={{
+    position: "relative",
+    width: "100%",
+    height: "420px",
+    overflow: "hidden",
+    borderRadius: "40px",
+    background:
+      "radial-gradient(circle at top,#eef7ff 0%,#d7ecff 35%,#f7fbff 100%)",
+  }}
+> */}
+
+      
 
       {/* ══════════ STATS STRIP ══════════ */}
       <section className="home-stats-strip">
@@ -488,6 +642,482 @@ export function Home() {
           <CarouselDots count={projects.length} idx={projCar.idx} setIdx={projCar.setIdx} />
         </section>
       )}
+
+
+      <div
+        ref={heroRef}
+        onMouseMove={handleMouseMove}
+        style={{
+          position: "relative",
+          width: "100%",
+          height: "520px",
+          overflow: "hidden",
+          borderRadius: "1px",
+          background:
+            "radial-gradient(circle at center,#eef7ff,#cde8ff,#b4d9ff)",
+          backgroundSize: "120% 120%",
+          transition: "background-position .2s linear"
+        }}
+      >
+
+        {
+          Array.from({ length: 18 }).map((_, i) => (
+            <div
+              key={i}
+              style={{
+                position: "absolute",
+                width: 8 + Math.random() * 10,
+                height: 8 + Math.random() * 10,
+                borderRadius: "50%",
+                background: "rgba(255,255,255,.45)",
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`,
+                filter: "blur(2px)",
+                animation: `float ${6 + i}s ease-in-out infinite`
+              }}
+            />
+          ))
+        }
+
+        <div
+          style={{
+            position: "absolute",
+            width: 700,
+            height: 700,
+            background: "#2F80FF",
+            borderRadius: "50%",
+            filter: "blur(170px)",
+            opacity: .16,
+            top: -260,
+            right: -200,
+            animation: "glow 8s infinite",
+          }}
+        />
+
+        <div
+          style={{
+            position: "absolute",
+            width: 500,
+            height: 500,
+            borderRadius: "50%",
+            background: "#0078D4",
+            filter: "blur(180px)",
+            opacity: .14,
+            left: "35%",
+            top: "25%"
+          }}
+        />
+
+        <div
+          style={{
+            position: "absolute",
+            width: 550,
+            height: 550,
+            background: "#00B7FF",
+            borderRadius: "50%",
+            filter: "blur(150px)",
+            opacity: .12,
+            left: -180,
+            bottom: -200,
+            animation: "glow 10s infinite",
+          }}
+        />
+
+        <div
+          style={{
+            position: "absolute",
+            width: 260,
+            height: 260,
+            borderRadius: "50%",
+            background: "rgba(255,255,255,.45)",
+            backdropFilter: "blur(40px)",
+            top: 110,
+            left: "40%",
+            filter: "blur(2px)"
+          }}
+        />
+
+        <div
+          style={{
+            position: "absolute",
+            width: 160,
+            height: 160,
+            borderRadius: "50%",
+            background: "rgba(255,255,255,.35)",
+            bottom: 120,
+            left: 140
+          }}
+        />
+
+        <div
+          style={{
+            position: "absolute",
+            width: 120,
+            height: 120,
+            borderRadius: "50%",
+            background: "rgba(255,255,255,.35)",
+            right: 180,
+            bottom: 150
+          }}
+        />
+
+        <div
+          style={{
+            ...glassCard,
+            left: "8%",
+            top: "18%",
+            animation: "float 7s ease-in-out infinite"
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.transform = "translateY(-10px) rotateX(12deg) rotateY(-12deg)";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = "";
+          }}
+        >
+
+          <SiMongodb
+            size={62}
+            color="#13AA52"
+          />
+
+        </div>
+
+        <div
+          style={{
+            ...glassCard,
+            left: "28%",
+            top: "8%",
+            animation: "float 6s ease-in-out infinite",
+            animationDelay: ".8s"
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.transform = "translateY(-12px) rotateY(12deg)";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = "";
+          }}
+        >
+
+          <FaMicrosoft
+            size={60}
+            color="#0078D4"
+          />
+
+        </div>
+
+        <div
+          style={{
+            ...glassCard,
+            right: "25%",
+            top: "12%",
+            animation: "float 7.5s ease-in-out infinite",
+            animationDelay: "1.2s"
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.transform = "translateY(-10px) rotateY(-10deg)";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = "";
+          }}
+        >
+
+          <SiDocker
+            size={62}
+            color="#2496ED"
+          />
+
+        </div>
+
+        <div
+          style={{
+            ...glassCard,
+            right: "8%",
+            top: "22%",
+            animation: "float 8s ease-in-out infinite",
+            animationDelay: "1.6s"
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.transform = "translateY(-10px) rotateX(-12deg)";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = "";
+          }}
+        >
+
+          <SiKubernetes
+            size={64}
+            color="#326CE5"
+          />
+
+        </div>
+
+        <div
+          style={{
+            position: "absolute",
+            left: "50%",
+            top: "50%",
+            transform: "translate(-50%,-50%)",
+            width: "200px",
+            height: "200px",
+            borderRadius: "50%",
+            background: "rgba(255,255,255,.72)",
+            backdropFilter: "blur(35px)",
+            border: "1px solid rgba(255,255,255,.6)",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            boxShadow: "0 35px 80px rgba(0,120,255,.18)"
+          }}
+        >
+
+          <div
+            style={{
+              textAlign: "center"
+            }}
+          >
+
+            <h1
+              style={{
+                margin: 0,
+                fontSize: "70px",
+                fontWeight: 800,
+                color: "#0078D4"
+              }}
+            >
+              {"</>"}
+            </h1>
+
+            <p
+              style={{
+                marginTop: 8,
+                fontSize: 18,
+                fontWeight: 600,
+                color: "#555"
+              }}
+            >
+              Cloud • DevOps • Full Stack
+            </p>
+
+          </div>
+
+        </div>
+
+        <div
+          style={{
+            ...glassCard,
+            right: "42%",
+            top: "4%",
+            width: "110px",
+            height: "110px",
+            animation: "float 6.8s ease-in-out infinite",
+            animationDelay: "1.4s",
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.transform =
+              "translateY(-10px) rotateX(10deg) scale(1.05)";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = "";
+          }}
+        >
+          <SiTypescript size={58} color="#3178C6" />
+        </div>
+
+        <div
+          style={{
+            ...glassCard,
+            left: "42%",
+            top: "3%",
+            width: "110px",
+            height: "110px",
+            animation: "float 7.8s ease-in-out infinite",
+            animationDelay: ".8s",
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.transform =
+              "translateY(-10px) rotateY(10deg) scale(1.05)";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = "";
+          }}
+        >
+          <SiGithub size={58} color="#181717" />
+        </div>
+
+        <div
+          style={{
+            ...glassCard,
+            right: "12%",
+            bottom: "18%",
+            width: "130px",
+            height: "130px",
+            animation: "float 8s ease-in-out infinite",
+            animationDelay: "3s",
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.transform =
+              "translateY(-10px) rotateX(-10deg) scale(1.05)";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = "";
+          }}
+        >
+          <SiLinux size={70} color="#111" />
+        </div>
+
+        <div
+          style={{
+            ...glassCard,
+            right: "28%",
+            bottom: "8%",
+            width: "125px",
+            height: "125px",
+            animation: "float 7s ease-in-out infinite",
+            animationDelay: "2.4s",
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.transform =
+              "translateY(-12px) rotateY(-12deg) scale(1.06)";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = "";
+          }}
+        >
+          <SiNodedotjs size={68} color="#339933" />
+        </div>
+
+        <div
+          style={{
+            ...glassCard,
+            left: "28%",
+            bottom: "8%",
+            width: "125px",
+            height: "125px",
+            animation: "float 6.5s ease-in-out infinite",
+            animationDelay: "1.5s",
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.transform =
+              "translateY(-10px) rotateY(12deg) scale(1.05)";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = "";
+          }}
+        >
+          <SiReact size={68} color="#61DAFB" />
+        </div>
+        <div
+          style={{
+            ...glassCard,
+            left: "12%",
+            bottom: "18%",
+            width: "130px",
+            height: "130px",
+            animation: "float 7.5s ease-in-out infinite",
+            animationDelay: "2s",
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.transform =
+              "translateY(-12px) rotateX(10deg) rotateY(-10deg) scale(1.06)";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = "";
+          }}
+        >
+          <SiTerraform size={68} color="#7B42BC" />
+        </div>
+
+        <div
+          style={{
+            ...glassCard,
+            left: "5%",
+            top: "48%",
+            animation: "float 8s ease-in-out infinite"
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.transform = "translateY(-12px) scale(1.08)";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = "";
+          }}
+        >
+
+          <SiPython
+            size={65}
+            color="#3776AB"
+          />
+
+        </div>
+
+        <div
+          style={{
+            ...glassCard,
+            right: "5%",
+            top: "48%",
+            animation: "float 7s ease-in-out infinite"
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.transform = "translateY(-12px) scale(1.08)";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = "";
+          }}
+        >
+
+          <FaJava
+            size={65}
+            color="#f89820"
+          />
+
+        </div>
+
+        <div
+          style={{
+            ...glassCard,
+            left: "40%",
+            bottom: "3%",
+            animation: "float 7.5s ease-in-out infinite"
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.transform = "translateY(-10px) scale(1.08)";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = "";
+          }}
+        >
+
+          <SiGit
+            size={65}
+            color="#F05032"
+          />
+
+        </div>
+
+        <div
+          style={{
+            ...glassCard,
+            right: "40%",
+            bottom: "3%",
+            animation: "float 8.5s ease-in-out infinite"
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.transform = "translateY(-10px) scale(1.08)";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = "";
+          }}
+        >
+
+          <SiMysql
+            size={65}
+            color="#00758F"
+          />
+
+        </div>
+
+
+      </div>
 
       {/* ══════════ TECHNICAL SKILLS ══════════ */}
       {topSkills.length > 0 && (
@@ -760,10 +1390,12 @@ export function Home() {
         </section>
       )}
 
+      
+
 
 
       {/* ══════════ PROFILE STRIP ══════════ */}
-      <section className="ms-profile-strip">
+      {/* <section className="ms-profile-strip">
         <div className="ms-profile-strip__inner">
           <div className="ms-profile-strip__photo">
             {profile?.profileImage
@@ -789,9 +1421,19 @@ export function Home() {
             </div>
           </div>
         </div>
+      </section> */}
+
+              <section className="ms-quick">
+        <div className="ms-quick__inner">
+          {quickLinks.map(item => (
+            <Link key={item.to} to={item.to} className="ms-quick__item">
+              <span className="ms-quick__icon">{item.icon}</span>
+              {/* <span className="ms-quick__label">{item.label}</span> */}
+              <span className="ms-quick__subtitle">{item.text}</span>
+            </Link>
+          ))}
+        </div>
       </section>
-
-
 
 
       {/* ══════════ CTA BAND ══════════ */}

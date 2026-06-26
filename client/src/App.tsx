@@ -22,6 +22,7 @@ import { EventsAdminPage } from './pages/admin/EventsAdminPage';
 import { CertificatesAdminPage } from './pages/admin/CertificatesAdminPage';
 import { ExperiencesAdminPage } from './pages/admin/ExperiencesAdminPage';
 import { AcademicsAdminPage } from './pages/admin/AcademicsAdminPage';
+
 import Certificates from './Certificates.jsx';
 export default function App() {
   return (
@@ -38,6 +39,7 @@ export default function App() {
         <Route path="/certificates" element={<Certificates />} />
         <Route path="/academic" element={<AcademicPage />} />
         <Route path="/cert" element={<Certificates />} />
+        
 
         <Route path="/admin" element={<Navigate to="/admin/dashboard" replace />} />
         <Route path="/admin/login" element={<LoginPage />} />

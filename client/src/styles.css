@@ -4151,8 +4151,8 @@ select,
 
 .ms-hero__photo {
   width: 100%;
-  max-width: 400px;
-  border-radius: 16px;
+  max-width: 450px;
+  border-radius: 3px;
   object-fit: cover;
   object-position: top center;
   box-shadow: 0 24px 60px rgba(0, 0, 0, 0.3);
@@ -4821,12 +4821,28 @@ select,
     margin: 0 auto;
   }
 
+  .ms-topbar__brand {
+    min-width: 0;
+    gap: 8px;
+  }
+
+  .ms-topbar__name {
+    font-size: 0.92rem;
+    max-width: 160px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
   .ms-nav {
     display: none;
   }
 
   .ms-topbar__actions {
     margin-left: auto;
+    gap: 6px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
   }
 
   .ms-footer__inner {
@@ -4850,6 +4866,21 @@ select,
 
   .ms-hero__heading {
     font-size: 2rem;
+  }
+
+  .ms-topbar__inner {
+    padding: 0 12px;
+    justify-content: space-between;
+  }
+
+  .ms-topbar__brand {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .ms-topbar__name {
+    font-size: 0.82rem;
+    max-width: 120px;
   }
 }
 

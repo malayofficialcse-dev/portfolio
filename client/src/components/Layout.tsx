@@ -11,13 +11,13 @@ export function Layout() {
           {/* Brand */}
           <div className="ms-topbar__brand">
             {/* Four-square Windows-style logo */}
-            <div className="ms-logo" aria-label="Logo">
+            {/* <div className="ms-logo" aria-label="Logo">
               <span style={{ background: '#f25022' }} />
               <span style={{ background: '#7fba00' }} />
               <span style={{ background: '#00a4ef' }} />
               <span style={{ background: '#ffb900' }} />
-            </div>
-            <span className="ms-topbar__name">Malay Maity</span>
+            </div> */}
+            <span className="ms-topbar__name">Malay Maity  | </span>
           </div>
 
           {/* Primary Nav */}
