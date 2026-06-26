@@ -7,6 +7,7 @@ import {
     deleteExperience
 } from '../controllers/experienceController';
 import { upload } from '../middlewares/upload';
+import { authMiddleware } from '../middlewares/auth';
 
 const router = express.Router();
 
@@ -15,10 +16,10 @@ router.get('/', getExperiences);
 router.get('/:id', getExperience);
 
 // Protected routes (admin)
-router.post('/', upload.any(), createExperience);
+router.post('/', authMiddleware, upload.any(), createExperience);
 
-router.put('/:id', upload.any(), updateExperience);
+router.put('/:id', authMiddleware, upload.any(), updateExperience);
 
-router.delete('/:id', deleteExperience);
+router.delete('/:id', authMiddleware, deleteExperience);
 
 export default router;
