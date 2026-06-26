@@ -396,7 +396,7 @@ opacity:.15;
       eyebrow: 'Malay Maity',
       heading: 'Full Stack Software Engineer',
       sub: profile?.location ?? 'Kolkata, West Bengal',
-      body: 'Building scalable web applications using React, Node.js, Azure and Kubernetes.Researcher • Open Source Contributor • Cloud Enthusiast',
+      body: 'Full Stack Software Engineer passionate about designing scalable,cloud-native applications using React, Node.js, Microsoft Azure, Kubernetes, Docker and modern DevOps practices.I enjoy transforming complex business requirements into secure,maintainable and high-performance software solutions.',
       cta: { label: 'Get in touch', to: profile?.email ? (`mailto:${profile.email}` as any) : '/admin/login' },
       ctaAlt: { label: 'Explore skills', to: '/skills' },
       bg: 'linear-gradient(135deg, #eef3f8 0%, #e6edf5 40%, #dde8f0 100%)',
@@ -460,6 +460,7 @@ opacity:.15;
               <Link to={cur.cta.to} className="ms-btn ms-btn--primary">{cur.cta.label}</Link>
               <Link to={cur.ctaAlt.to} className={isLight ? 'ms-btn ms-btn--outline-dark' : 'ms-btn ms-btn--ghost'}>{cur.ctaAlt.label}</Link>
             </div>
+            
             {/* <div className="ms-hero__techs">
               <div className="ms-tech">
                 <SiKubernetes />
@@ -1119,6 +1120,18 @@ opacity:.15;
 
       </div>
 
+      <section className="ms-quick">
+        <div className="ms-quick__inner">
+          {quickLinks.map(item => (
+            <Link key={item.to} to={item.to} className="ms-quick__item">
+              <span className="ms-quick__icon">{item.icon}</span>
+              {/* <span className="ms-quick__label">{item.label}</span> */}
+              <span className="ms-quick__subtitle">{item.text}</span>
+            </Link>
+          ))}
+        </div>
+      </section>
+
       {/* ══════════ TECHNICAL SKILLS ══════════ */}
       {topSkills.length > 0 && (
         <section className="home-skills-section">
@@ -1155,6 +1168,9 @@ opacity:.15;
           </div>
         </section>
       )}
+
+
+      
 
       {/* ══════════ CERTIFICATES CAROUSEL ══════════ */}
       {certs.length > 0 && (
@@ -1423,17 +1439,7 @@ opacity:.15;
         </div>
       </section> */}
 
-              <section className="ms-quick">
-        <div className="ms-quick__inner">
-          {quickLinks.map(item => (
-            <Link key={item.to} to={item.to} className="ms-quick__item">
-              <span className="ms-quick__icon">{item.icon}</span>
-              {/* <span className="ms-quick__label">{item.label}</span> */}
-              <span className="ms-quick__subtitle">{item.text}</span>
-            </Link>
-          ))}
-        </div>
-      </section>
+              
 
 
       {/* ══════════ CTA BAND ══════════ */}
