@@ -13,7 +13,7 @@ import {
   FaGithub,
   FaLinkedin,
   FaDocker,
-  
+
 } from "react-icons/fa";
 // import {
 //   SiDocker,
@@ -225,12 +225,12 @@ export function Home() {
     position: "absolute",
     width: "125px",
     height: "125px",
-    
+
     background:
       "linear-gradient(180deg, rgba(255,255,255,.72), rgba(255,255,255,.42))",
     backdropFilter: "blur(22px)",
     WebkitBackdropFilter: "blur(22px)",
-    
+
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
@@ -460,7 +460,7 @@ opacity:.15;
               <Link to={cur.cta.to} className="ms-btn ms-btn--primary">{cur.cta.label}</Link>
               <Link to={cur.ctaAlt.to} className={isLight ? 'ms-btn ms-btn--outline-dark' : 'ms-btn ms-btn--ghost'}>{cur.ctaAlt.label}</Link>
             </div>
-            
+
             {/* <div className="ms-hero__techs">
               <div className="ms-tech">
                 <SiKubernetes />
@@ -538,7 +538,7 @@ opacity:.15;
       </section>
 
       {/* ══════════ QUICK NAV ══════════ */}
-      
+
 
       <style>{floatAnimation}</style>
 
@@ -554,7 +554,7 @@ opacity:.15;
   }}
 > */}
 
-      
+
 
       {/* ══════════ STATS STRIP ══════════ */}
       <section className="home-stats-strip">
@@ -647,6 +647,7 @@ opacity:.15;
 
       <div
         ref={heroRef}
+        className="ms-hero-container"
         onMouseMove={handleMouseMove}
         style={{
           position: "relative",
@@ -763,6 +764,7 @@ opacity:.15;
         />
 
         <div
+          className="hero-card hero-card-mongodb"
           style={{
             ...glassCard,
             left: "8%",
@@ -785,6 +787,7 @@ opacity:.15;
         </div>
 
         <div
+          className="hero-card hero-card-kafka"
           style={{
             ...glassCard,
             left: "28%",
@@ -808,6 +811,7 @@ opacity:.15;
         </div>
 
         <div
+          className="hero-card hero-card-docker"
           style={{
             ...glassCard,
             right: "25%",
@@ -831,6 +835,7 @@ opacity:.15;
         </div>
 
         <div
+          className="hero-card hero-card-kubernetes"
           style={{
             ...glassCard,
             right: "8%",
@@ -854,6 +859,7 @@ opacity:.15;
         </div>
 
         <div
+          className="hero-center-circle"
           style={{
             position: "absolute",
             left: "50%",
@@ -905,6 +911,7 @@ opacity:.15;
         </div>
 
         <div
+          className="hero-card hero-card-typescript"
           style={{
             ...glassCard,
             right: "42%",
@@ -926,6 +933,7 @@ opacity:.15;
         </div>
 
         <div
+          className="hero-card hero-card-github"
           style={{
             ...glassCard,
             left: "42%",
@@ -947,6 +955,7 @@ opacity:.15;
         </div>
 
         <div
+          className="hero-card hero-card-linux"
           style={{
             ...glassCard,
             right: "12%",
@@ -968,6 +977,7 @@ opacity:.15;
         </div>
 
         <div
+          className="hero-card hero-card-nodejs"
           style={{
             ...glassCard,
             right: "28%",
@@ -989,6 +999,7 @@ opacity:.15;
         </div>
 
         <div
+          className="hero-card hero-card-react"
           style={{
             ...glassCard,
             left: "28%",
@@ -1009,6 +1020,7 @@ opacity:.15;
           <SiReact size={68} color="#61DAFB" />
         </div>
         <div
+          className="hero-card hero-card-terraform"
           style={{
             ...glassCard,
             left: "12%",
@@ -1030,6 +1042,7 @@ opacity:.15;
         </div>
 
         <div
+          className="hero-card hero-card-python"
           style={{
             ...glassCard,
             left: "5%",
@@ -1052,6 +1065,7 @@ opacity:.15;
         </div>
 
         <div
+          className="hero-card hero-card-java"
           style={{
             ...glassCard,
             right: "5%",
@@ -1074,6 +1088,7 @@ opacity:.15;
         </div>
 
         <div
+          className="hero-card hero-card-git"
           style={{
             ...glassCard,
             left: "40%",
@@ -1096,6 +1111,7 @@ opacity:.15;
         </div>
 
         <div
+          className="hero-card hero-card-mysql"
           style={{
             ...glassCard,
             right: "40%",
@@ -1120,17 +1136,7 @@ opacity:.15;
 
       </div>
 
-      <section className="ms-quick">
-        <div className="ms-quick__inner">
-          {quickLinks.map(item => (
-            <Link key={item.to} to={item.to} className="ms-quick__item">
-              <span className="ms-quick__icon">{item.icon}</span>
-              {/* <span className="ms-quick__label">{item.label}</span> */}
-              <span className="ms-quick__subtitle">{item.text}</span>
-            </Link>
-          ))}
-        </div>
-      </section>
+
 
       {/* ══════════ TECHNICAL SKILLS ══════════ */}
       {topSkills.length > 0 && (
@@ -1170,7 +1176,17 @@ opacity:.15;
       )}
 
 
-      
+      <section className="ms-quick" style={{ borderTop: "1px solid #e5e7eb" }}>
+        <div className="ms-quick__inner">
+          {quickLinks.map(item => (
+            <Link key={item.to} to={item.to} className="ms-quick__item">
+              <span className="ms-quick__icon">{item.icon}</span>
+              {/* <span className="ms-quick__label">{item.label}</span> */}
+              <span className="ms-quick__subtitle">{item.text}</span>
+            </Link>
+          ))}
+        </div>
+      </section>
 
       {/* ══════════ CERTIFICATES CAROUSEL ══════════ */}
       {certs.length > 0 && (
@@ -1406,7 +1422,7 @@ opacity:.15;
         </section>
       )}
 
-      
+
 
 
 
@@ -1439,7 +1455,7 @@ opacity:.15;
         </div>
       </section> */}
 
-              
+
 
 
       {/* ══════════ CTA BAND ══════════ */}
