@@ -13,7 +13,7 @@ import {
   FaGithub,
   FaLinkedin,
   FaDocker,
-  FaMicrosoft
+  
 } from "react-icons/fa";
 // import {
 //   SiDocker,
@@ -33,7 +33,7 @@ import {
   SiMongodb,
   SiDocker,
   SiKubernetes,
-
+  SiApachekafka,
   SiTerraform,
   SiReact,
   SiNodedotjs,
@@ -800,9 +800,9 @@ opacity:.15;
           }}
         >
 
-          <FaMicrosoft
+          <SiApachekafka
             size={60}
-            color="#0078D4"
+            color="#000000"
           />
 
         </div>
@@ -1068,7 +1068,7 @@ opacity:.15;
 
           <FaJava
             size={65}
-            color="#f89820"
+            color="#ff0000"
           />
 
         </div>
