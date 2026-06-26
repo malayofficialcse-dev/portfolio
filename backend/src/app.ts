@@ -25,21 +25,21 @@ const app = express();
 // Set ALLOWED_ORIGINS in Azure App Settings (comma-separated list of allowed origins).
 // Example: https://your-frontend-app.azurewebsites.net,https://yourdomain.com
 const allowedOrigins = process.env.ALLOWED_ORIGINS
-  ? process.env.ALLOWED_ORIGINS.split(',').map((o) => o.trim())
-  : ['http://localhost:3000','http://localhost:3001','http://localhost:5174','http://localhost:5173'];
+    ? process.env.ALLOWED_ORIGINS.split(',').map((o) => o.trim())
+    : ['https://gray-rock-095d72400.7.azurestaticapps.net', 'http://localhost:3000', 'http://localhost:3001', 'http://localhost:5174', 'http://localhost:5173'];
 
 app.use(
-  cors({
-    origin: (origin, callback) => {
-      // Allow requests with no origin (mobile apps, curl, Postman)
-      if (!origin) return callback(null, true);
-      if (allowedOrigins.includes(origin)) {
-        return callback(null, true);
-      }
-      return callback(new Error(`CORS: Origin '${origin}' not allowed`));
-    },
-    credentials: true,
-  })
+    cors({
+        origin: (origin, callback) => {
+            // Allow requests with no origin (mobile apps, curl, Postman)
+            if (!origin) return callback(null, true);
+            if (allowedOrigins.includes(origin)) {
+                return callback(null, true);
+            }
+            return callback(new Error(`CORS: Origin '${origin}' not allowed`));
+        },
+        credentials: true,
+    })
 );
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
