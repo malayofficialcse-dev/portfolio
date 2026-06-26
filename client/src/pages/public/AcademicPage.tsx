@@ -27,7 +27,7 @@ type AcademicItem = {
 };
 
 const ACADEMICS_API =
-  'https://mmport-b2fzejc8h9cwfffb.centralindia-01.azurewebsites.net/api/academics';
+  `${import.meta.env.VITE_BACKEND_URL || 'https://mmport-b2fzejc8h9cwfffb.centralindia-01.azurewebsites.net'}/api/academics`;
 
 const formatDate = (value?: string) => {
   if (!value) return 'Date not available';
@@ -37,7 +37,7 @@ const formatDate = (value?: string) => {
 
 const normalizeUrl = (value?: string) => {
   if (!value) return '';
-  return value.startsWith('http') ? value : `https://mmport-b2fzejc8h9cwfffb.centralindia-01.azurewebsites.net${value}`;
+  return value.startsWith('http') ? value : `${import.meta.env.VITE_BACKEND_URL || 'https://mmport-b2fzejc8h9cwfffb.centralindia-01.azurewebsites.net'}${value}`;
 };
 
 const averageGpa = (items: SemesterResult[]) => {
@@ -45,6 +45,95 @@ const averageGpa = (items: SemesterResult[]) => {
   const total = items.reduce((sum, item) => sum + (item.gpa ?? 0), 0);
   return total / items.length;
 };
+
+function AcademicCarousel({ logoUrl, imageUrls, alt }: { logoUrl?: string; imageUrls?: string[]; alt: string }) {
+  const images = useMemo(() => {
+    const list: string[] = [];
+    if (logoUrl) list.push(logoUrl);
+    if (imageUrls) {
+      imageUrls.forEach((img) => {
+        if (img && img !== logoUrl) {
+          list.push(img);
+        }
+      });
+    }
+    return list;
+  }, [logoUrl, imageUrls]);
+
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  useEffect(() => {
+    if (images.length <= 1) return;
+    const interval = setInterval(() => {
+      setActiveIndex((prev) => (prev + 1) % images.length);
+    }, 3000);
+    return () => clearInterval(interval);
+  }, [images.length]);
+
+  if (images.length === 0) {
+    return <div className="academic-card__image academic-card__image--empty">Academic</div>;
+  }
+
+  return (
+    <div style={{ position: 'relative', width: '100%', height: '100%', overflow: 'hidden' }}>
+      {images.map((img, idx) => (
+        <img
+          key={img + '-' + idx}
+          src={normalizeUrl(img)}
+          alt={`${alt} - Image ${idx + 1}`}
+          className="academic-card__image"
+          style={{
+            position: idx === 0 ? 'relative' : 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+            opacity: idx === activeIndex ? 1 : 0,
+            transition: 'opacity 0.8s ease-in-out',
+            zIndex: idx === activeIndex ? 1 : 0,
+          }}
+          loading="lazy"
+        />
+      ))}
+      
+      {images.length > 1 && (
+        <div
+          style={{
+            position: 'absolute',
+            bottom: '10px',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            display: 'flex',
+            gap: '6px',
+            zIndex: 10,
+            background: 'rgba(0, 0, 0, 0.3)',
+            padding: '4px 8px',
+            borderRadius: '999px',
+          }}
+        >
+          {images.map((_, idx) => (
+            <button
+              key={idx}
+              onClick={() => setActiveIndex(idx)}
+              style={{
+                width: '6px',
+                height: '6px',
+                borderRadius: '50%',
+                border: 'none',
+                padding: 0,
+                background: idx === activeIndex ? '#fff' : 'rgba(255, 255, 255, 0.5)',
+                cursor: 'pointer',
+                transition: 'background 0.3s ease',
+              }}
+              aria-label={`Go to slide ${idx + 1}`}
+            />
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
 
 export function AcademicPage() {
   const [academics, setAcademics] = useState<AcademicItem[]>([]);
@@ -58,7 +147,7 @@ export function AcademicPage() {
       try {
         const res = await axios.get(ACADEMICS_API);
         if (active) {
-          setAcademics(res.data ?? []);
+          setAcademics(Array.isArray(res.data) ? res.data : []);
         }
       } catch (err) {
         console.error(err);
@@ -142,24 +231,17 @@ export function AcademicPage() {
             const images = academic.imageUrls ?? [];
             const average = semesters.length ? averageGpa(semesters) : 0;
 
+            const totalImagesCount = (academic.logoUrl ? 1 : 0) + (academic.imageUrls?.length ?? 0);
+
             return (
               <article key={academic._id} className="academic-card">
                 <div className="academic-card__media">
-                  {academic.logoUrl || images[0] ? (
-                    <img
-                      src={normalizeUrl(academic.logoUrl || images[0])}
-                      alt={academic.institution}
-                      className="academic-card__image"
-                      loading="lazy"
-                    />
-                  ) : (
-                    <div className="academic-card__image academic-card__image--empty">Academic</div>
-                  )}
+                  <AcademicCarousel logoUrl={academic.logoUrl} imageUrls={academic.imageUrls} alt={academic.institution} />
 
                   <div className="academic-card__overlay">
                     <span className="academic-card__badge">{academic.degree}</span>
                     <span className="academic-card__badge academic-card__badge--count">
-                      {images.length} image{images.length === 1 ? '' : 's'}
+                      {totalImagesCount} image{totalImagesCount === 1 ? '' : 's'}
                     </span>
                   </div>
                 </div>
