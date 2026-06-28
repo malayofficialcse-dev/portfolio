@@ -1,5 +1,6 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { Layout } from './components/Layout';
+import { ProtectedRoute } from './components/ProtectedRoute';
 import { Home } from './pages/Home';
 import { NotFound } from './pages/NotFound';
 import { SkillsPage } from './pages/public/SkillsPage';
@@ -44,16 +45,16 @@ export default function App() {
         <Route path="/admin" element={<Navigate to="/admin/dashboard" replace />} />
         <Route path="/admin/login" element={<LoginPage />} />
         <Route path="/admin/register" element={<RegisterPage />} />
-        <Route path="/admin/dashboard" element={<DashboardPage />} />
-        <Route path="/admin/profile" element={<ProfilePage />} />
-        <Route path="/admin/skills" element={<SkillsAdminPage />} />
-        <Route path="/admin/projects" element={<ProjectsAdminPage />} />
-        <Route path="/admin/research" element={<ResearchAdminPage />} />
-        <Route path="/admin/books" element={<BooksAdminPage />} />
-        <Route path="/admin/events" element={<EventsAdminPage />} />
-        <Route path="/admin/certificates" element={<CertificatesAdminPage />} />
-        <Route path="/admin/experiences" element={<ExperiencesAdminPage />} />
-        <Route path="/admin/academics" element={<AcademicsAdminPage />} />
+        <Route path="/admin/dashboard" element={<ProtectedRoute element={<DashboardPage />} />} />
+        <Route path="/admin/profile" element={<ProtectedRoute element={<ProfilePage />} />} />
+        <Route path="/admin/skills" element={<ProtectedRoute element={<SkillsAdminPage />} />} />
+        <Route path="/admin/projects" element={<ProtectedRoute element={<ProjectsAdminPage />} />} />
+        <Route path="/admin/research" element={<ProtectedRoute element={<ResearchAdminPage />} />} />
+        <Route path="/admin/books" element={<ProtectedRoute element={<BooksAdminPage />} />} />
+        <Route path="/admin/events" element={<ProtectedRoute element={<EventsAdminPage />} />} />
+        <Route path="/admin/certificates" element={<ProtectedRoute element={<CertificatesAdminPage />} />} />
+        <Route path="/admin/experiences" element={<ProtectedRoute element={<ExperiencesAdminPage />} />} />
+        <Route path="/admin/academics" element={<ProtectedRoute element={<AcademicsAdminPage />} />} />
       </Route>
       <Route path="*" element={<NotFound />} />
     </Routes>
