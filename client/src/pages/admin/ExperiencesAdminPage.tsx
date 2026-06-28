@@ -241,13 +241,7 @@ export function ExperiencesAdminPage() {
     }
 
     try {
-      const headersConfig = getAuthHeaders();
-      const config = {
-        headers: {
-          ...headersConfig.headers,
-          'Content-Type': 'multipart/form-data',
-        },
-      };
+      const config = getAuthHeaders();
 
       if (editingId) {
         await axios.put(`${API_BASE}/experiences/${editingId}`, formData, config);

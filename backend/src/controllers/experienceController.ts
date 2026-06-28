@@ -3,6 +3,29 @@ import Experience from '../models/Experience';
 import { v2 as cloudinary } from 'cloudinary';
 import fs from 'fs';
 
+const uploadFileAndGetUrl = async (file: Express.Multer.File, folder: string) => {
+    const isCloudinaryConfigured = Boolean(
+        process.env.CLOUDINARY_CLOUD_NAME &&
+        process.env.CLOUDINARY_CLOUD_NAME !== 'demo' &&
+        process.env.CLOUDINARY_API_KEY &&
+        process.env.CLOUDINARY_API_KEY !== 'demo' &&
+        process.env.CLOUDINARY_API_SECRET &&
+        process.env.CLOUDINARY_API_SECRET !== 'demo'
+    );
+
+    if (isCloudinaryConfigured) {
+        try {
+            const result = await cloudinary.uploader.upload(file.path, { folder });
+            if (fs.existsSync(file.path)) fs.unlinkSync(file.path);
+            return result.secure_url;
+        } catch (error) {
+            console.warn(`[EXP UPLOAD] Cloudinary upload failed for ${file.originalname}, falling back to local storage`, error);
+        }
+    }
+
+    return `/uploads/${file.filename}`;
+};
+
 // Get all experiences
 export const getExperiences = async (req: Request, res: Response) => {
     try {
@@ -46,9 +69,8 @@ export const createExperience = async (req: Request, res: Response) => {
             if (mainImageFiles.length > 0) {
                 const urls = [];
                 for (const file of mainImageFiles) {
-                    const result = await cloudinary.uploader.upload(file.path, { folder: 'experiences/main' });
-                    urls.push(result.secure_url);
-                    if (fs.existsSync(file.path)) fs.unlinkSync(file.path);
+                    const url = await uploadFileAndGetUrl(file, 'experiences/main');
+                    urls.push(url);
                 }
                 experience.imageUrls = urls;
             }
@@ -60,23 +82,20 @@ export const createExperience = async (req: Request, res: Response) => {
                     if (projectImageFiles.length > 0) {
                         const urls = [];
                         for (const file of projectImageFiles) {
-                            const result = await cloudinary.uploader.upload(file.path, { folder: 'experiences/projects' });
-                            urls.push(result.secure_url);
-                            if (fs.existsSync(file.path)) fs.unlinkSync(file.path);
+                            const url = await uploadFileAndGetUrl(file, 'experiences/projects');
+                            urls.push(url);
                         }
                         experience.projects[i].images = urls;
                     }
                 }
             }
 
-            // Handle Skill Icons (Cloudinary)
+            // Handle Skill Icons
             if (experience.skills) {
                 for (let i = 0; i < experience.skills.length; i++) {
                     const skillIconFile = files.find(f => f.fieldname === `skill_icon_${i}`);
                     if (skillIconFile) {
-                        const result = await cloudinary.uploader.upload(skillIconFile.path, { folder: 'experiences/skills' });
-                        experience.skills[i].iconUrl = result.secure_url;
-                        if (fs.existsSync(skillIconFile.path)) fs.unlinkSync(skillIconFile.path);
+                        experience.skills[i].iconUrl = await uploadFileAndGetUrl(skillIconFile, 'experiences/skills');
                     }
                 }
             }
@@ -117,9 +136,8 @@ export const updateExperience = async (req: Request, res: Response) => {
             if (mainImageFiles.length > 0) {
                 const urls = [];
                 for (const file of mainImageFiles) {
-                    const result = await cloudinary.uploader.upload(file.path, { folder: 'experiences/main' });
-                    urls.push(result.secure_url);
-                    if (fs.existsSync(file.path)) fs.unlinkSync(file.path);
+                    const url = await uploadFileAndGetUrl(file, 'experiences/main');
+                    urls.push(url);
                 }
                 experience.imageUrls = [...(experience.imageUrls || []), ...urls];
             }
@@ -131,9 +149,8 @@ export const updateExperience = async (req: Request, res: Response) => {
                     if (projectImageFiles.length > 0) {
                         const urls = [];
                         for (const file of projectImageFiles) {
-                            const result = await cloudinary.uploader.upload(file.path, { folder: 'experiences/projects' });
-                            urls.push(result.secure_url);
-                            if (fs.existsSync(file.path)) fs.unlinkSync(file.path);
+                            const url = await uploadFileAndGetUrl(file, 'experiences/projects');
+                            urls.push(url);
                         }
                         experience.projects[i].images = [...(experience.projects[i].images || []), ...urls];
                     }
@@ -145,9 +162,7 @@ export const updateExperience = async (req: Request, res: Response) => {
                 for (let i = 0; i < experience.skills.length; i++) {
                     const skillIconFile = files.find(f => f.fieldname === `skill_icon_${i}`);
                     if (skillIconFile) {
-                        const result = await cloudinary.uploader.upload(skillIconFile.path, { folder: 'experiences/skills' });
-                        experience.skills[i].iconUrl = result.secure_url;
-                        if (fs.existsSync(skillIconFile.path)) fs.unlinkSync(skillIconFile.path);
+                        experience.skills[i].iconUrl = await uploadFileAndGetUrl(skillIconFile, 'experiences/skills');
                     }
                 }
             }

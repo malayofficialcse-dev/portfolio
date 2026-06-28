@@ -57,6 +57,142 @@ const getDuration = (joinDate?: string, endDate?: string, current?: boolean) => 
   return `${months} months`;
 };
 
+const ExperienceCard = ({ experience }: { experience: ExperienceItem }) => {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const images = useMemo(
+    () => (experience.imageUrls ?? []).map((img) => normalizeUrl(img)).filter(Boolean),
+    [experience.imageUrls]
+  );
+
+  useEffect(() => {
+    setActiveIndex(0);
+  }, [images.length]);
+
+  useEffect(() => {
+    if (images.length <= 1) return;
+    const interval = window.setInterval(() => {
+      setActiveIndex((current) => (current + 1) % images.length);
+    }, 3000);
+    return () => window.clearInterval(interval);
+  }, [images.length]);
+
+  const image = images[activeIndex];
+  const skills = (experience.skills ?? []).filter(Boolean);
+  const docs = experience.documentUrls ?? [];
+  const duration = getDuration(experience.joinDate, experience.endDate, experience.isCurrent);
+
+  return (
+    <article key={experience._id} className="experience-card">
+      <div className="experience-card__media">
+        {image ? (
+          <>
+            <img src={image} alt={experience.company} className="experience-card__image" loading="lazy" />
+            {images.length > 1 ? (
+              <div className="experience-card__carousel-indicators">
+                {images.map((_, idx) => (
+                  <button
+                    key={idx}
+                    type="button"
+                    className={`experience-card__carousel-dot ${idx === activeIndex ? 'active' : ''}`}
+                    onClick={() => setActiveIndex(idx)}
+                    aria-label={`Show image ${idx + 1}`}
+                  />
+                ))}
+              </div>
+            ) : null}
+          </>
+        ) : (
+          <div className="experience-card__image experience-card__image--empty">Experience</div>
+        )}
+
+        <div className="experience-card__overlay">
+          <span className="experience-card__badge">{experience.isCurrent ? 'Current role' : 'Past role'}</span>
+          <span className="experience-card__badge experience-card__badge--count">
+            {skills.length} skill{skills.length === 1 ? '' : 's'}
+          </span>
+        </div>
+      </div>
+
+      <div className="experience-card__body">
+        <div className="experience-card__topline">
+          <span className="experience-card__date">
+            {formatShortMonth(experience.joinDate)} {experience.endDate || experience.isCurrent ? ` - ${experience.isCurrent ? 'Present' : formatShortMonth(experience.endDate)}` : ''}
+          </span>
+          {duration ? <span className="experience-card__duration">{duration}</span> : null}
+        </div>
+
+        <h2 className="experience-card__role">{experience.role}</h2>
+        <p className="experience-card__company">{experience.company.trim()}</p>
+        <p className="experience-card__summary">
+          {experience.isCurrent
+            ? 'Current position with ongoing responsibilities and active delivery.'
+            : 'Completed role with documented experience and project deliverables.'}
+        </p>
+
+        <div className="experience-card__skills">
+          {skills.length > 0 ? (
+            skills.map((skill) => (
+              <span key={skill._id} className="experience-chip">
+                {skill.iconUrl ? (
+                  <img src={normalizeUrl(skill.iconUrl)} alt={skill.name} />
+                ) : null}
+                {skill.name.trim()}
+              </span>
+            ))
+          ) : (
+            <span className="experience-chip experience-chip--muted">No skills listed</span>
+          )}
+        </div>
+
+        <div className="experience-card__meta">
+          <div>
+            <span>Started</span>
+            <strong>{formatDate(experience.joinDate)}</strong>
+          </div>
+          <div>
+            <span>Ended</span>
+            <strong>{experience.isCurrent ? 'Present' : formatDate(experience.endDate)}</strong>
+          </div>
+          <div>
+            <span>Projects</span>
+            <strong>{String(experience.projects?.length ?? 0).padStart(2, '0')}</strong>
+          </div>
+        </div>
+
+        <div className="experience-card__links">
+          {docs[0] ? (
+            <a
+              href={normalizeUrl(docs[0])}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="experience-button experience-button--primary"
+            >
+              Open Document
+            </a>
+          ) : (
+            <span className="experience-button experience-button--disabled">No document</span>
+          )}
+
+          {docs[1] ? (
+            <a
+              href={normalizeUrl(docs[1])}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="experience-button experience-button--secondary"
+            >
+              View More
+            </a>
+          ) : (
+            <span className="experience-button experience-button--secondary experience-button--disabled">
+              Additional file
+            </span>
+          )}
+        </div>
+      </div>
+    </article>
+  );
+};
+
 export function ExperiencesPage() {
   const [experiences, setExperiences] = useState<ExperienceItem[]>([]);
   const [loading, setLoading] = useState(true);
@@ -145,108 +281,9 @@ export function ExperiencesPage() {
         {error ? <p className="experiences-page__error">{error}</p> : null}
 
         <div className="experiences-grid">
-          {experiences.map((experience) => {
-            const image = experience.imageUrls?.[0];
-            const skills = (experience.skills ?? []).filter(Boolean);
-            const docs = experience.documentUrls ?? [];
-            const duration = getDuration(experience.joinDate, experience.endDate, experience.isCurrent);
-
-            return (
-              <article key={experience._id} className="experience-card">
-                <div className="experience-card__media">
-                  {image ? (
-                    <img src={image} alt={experience.company} className="experience-card__image" loading="lazy" />
-                  ) : (
-                    <div className="experience-card__image experience-card__image--empty">Experience</div>
-                  )}
-
-                  <div className="experience-card__overlay">
-                    <span className="experience-card__badge">{experience.isCurrent ? 'Current role' : 'Past role'}</span>
-                    <span className="experience-card__badge experience-card__badge--count">
-                      {skills.length} skill{skills.length === 1 ? '' : 's'}
-                    </span>
-                  </div>
-                </div>
-
-                <div className="experience-card__body">
-                  <div className="experience-card__topline">
-                    <span className="experience-card__date">
-                      {formatShortMonth(experience.joinDate)} {experience.endDate || experience.isCurrent ? ` - ${experience.isCurrent ? 'Present' : formatShortMonth(experience.endDate)}` : ''}
-                    </span>
-                    {duration ? <span className="experience-card__duration">{duration}</span> : null}
-                  </div>
-
-                  <h2 className="experience-card__role">{experience.role}</h2>
-                  <p className="experience-card__company">{experience.company.trim()}</p>
-                  <p className="experience-card__summary">
-                    {experience.isCurrent
-                      ? 'Current position with ongoing responsibilities and active delivery.'
-                      : 'Completed role with documented experience and project deliverables.'}
-                  </p>
-
-                  <div className="experience-card__skills">
-                    {skills.length > 0 ? (
-                      skills.map((skill) => (
-                        <span key={skill._id} className="experience-chip">
-                          {skill.iconUrl ? (
-                            <img src={normalizeUrl(skill.iconUrl)} alt={skill.name} />
-                          ) : null}
-                          {skill.name.trim()}
-                        </span>
-                      ))
-                    ) : (
-                      <span className="experience-chip experience-chip--muted">No skills listed</span>
-                    )}
-                  </div>
-
-                  <div className="experience-card__meta">
-                    <div>
-                      <span>Started</span>
-                      <strong>{formatDate(experience.joinDate)}</strong>
-                    </div>
-                    <div>
-                      <span>Ended</span>
-                      <strong>{experience.isCurrent ? 'Present' : formatDate(experience.endDate)}</strong>
-                    </div>
-                    <div>
-                      <span>Projects</span>
-                      <strong>{String(experience.projects?.length ?? 0).padStart(2, '0')}</strong>
-                    </div>
-                  </div>
-
-                  <div className="experience-card__links">
-                    {docs[0] ? (
-                      <a
-                        href={normalizeUrl(docs[0])}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="experience-button experience-button--primary"
-                      >
-                        Open Document
-                      </a>
-                    ) : (
-                      <span className="experience-button experience-button--disabled">No document</span>
-                    )}
-
-                    {docs[1] ? (
-                      <a
-                        href={normalizeUrl(docs[1])}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="experience-button experience-button--secondary"
-                      >
-                        View More
-                      </a>
-                    ) : (
-                      <span className="experience-button experience-button--secondary experience-button--disabled">
-                        Additional file
-                      </span>
-                    )}
-                  </div>
-                </div>
-              </article>
-            );
-          })}
+          {experiences.map((experience) => (
+            <ExperienceCard key={experience._id} experience={experience} />
+          ))}
         </div>
       </div>
     </section>

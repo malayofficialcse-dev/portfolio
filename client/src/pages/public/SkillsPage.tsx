@@ -95,8 +95,8 @@ export function SkillsPage() {
     [communicationSkills.length, technicalSkills.length, theoreticalSkills.length]
   );
 
-  const topTechnical = [...technicalSkills].sort((a, b) => b.level - a.level).slice(0, 6);
-  const topTheoretical = [...theoreticalSkills].sort((a, b) => b.level - a.level).slice(0, 5);
+  const sortedTechnical = [...technicalSkills].sort((a, b) => b.level - a.level);
+  const sortedTheoretical = [...theoreticalSkills].sort((a, b) => b.level - a.level);
 
   if (loading) {
     return (
@@ -185,30 +185,34 @@ export function SkillsPage() {
             </div>
 
             <div className="skills-technical-list">
-              {topTechnical.map((item) => (
-                <article key={item._id} className="skills-tech-row">
-                  <div className="skills-tech-row__icon">
-                    {item.iconUrl ? (
-                      <img src={item.iconUrl} alt={item.name} loading="lazy" />
-                    ) : (
-                      <span>{item.name.slice(0, 1).toUpperCase()}</span>
-                    )}
-                  </div>
-
-                  <div className="skills-tech-row__content">
-                    <div className="skills-tech-row__title">
-                      <strong>{item.name.trim()}</strong>
-                      <span>{categoryLabel(item.category)}</span>
+              {sortedTechnical.length > 0 ? (
+                sortedTechnical.map((item) => (
+                  <article key={item._id} className="skills-tech-row">
+                    <div className="skills-tech-row__icon">
+                      {item.iconUrl ? (
+                        <img src={item.iconUrl} alt={item.name} loading="lazy" />
+                      ) : (
+                        <span>{item.name.slice(0, 1).toUpperCase()}</span>
+                      )}
                     </div>
 
-                    <div className="skills-progress skills-progress--small">
-                      <span style={{ width: `${clamp(item.level)}%` }} />
-                    </div>
-                  </div>
+                    <div className="skills-tech-row__content">
+                      <div className="skills-tech-row__title">
+                        <strong>{item.name.trim()}</strong>
+                        <span>{categoryLabel(item.category)}</span>
+                      </div>
 
-                  <div className="skills-tech-row__score">{clamp(item.level)}%</div>
-                </article>
-              ))}
+                      <div className="skills-progress skills-progress--small">
+                        <span style={{ width: `${clamp(item.level)}%` }} />
+                      </div>
+                    </div>
+
+                    <div className="skills-tech-row__score">{clamp(item.level)}%</div>
+                  </article>
+                ))
+              ) : (
+                <p className="skills-empty">No technical skills available.</p>
+              )}
             </div>
           </section>
 
@@ -219,28 +223,32 @@ export function SkillsPage() {
             </div>
 
             <div className="skills-theory-grid">
-              {topTheoretical.map((item) => (
-                <article key={item._id} className="skills-theory-card">
-                  <div className="skills-theory-card__top">
-                    <div className="skills-theory-card__icon">
-                      {item.iconUrl ? (
-                        <img src={item.iconUrl} alt={item.name} loading="lazy" />
-                      ) : (
-                        <span>{item.name.slice(0, 1).toUpperCase()}</span>
-                      )}
+              {sortedTheoretical.length > 0 ? (
+                sortedTheoretical.map((item) => (
+                  <article key={item._id} className="skills-theory-card">
+                    <div className="skills-theory-card__top">
+                      <div className="skills-theory-card__icon">
+                        {item.iconUrl ? (
+                          <img src={item.iconUrl} alt={item.name} loading="lazy" />
+                        ) : (
+                          <span>{item.name.slice(0, 1).toUpperCase()}</span>
+                        )}
+                      </div>
+                      <div>
+                        <strong>{item.name.trim()}</strong>
+                        <span>{categoryLabel(item.category)}</span>
+                      </div>
                     </div>
-                    <div>
-                      <strong>{item.name.trim()}</strong>
-                      <span>{categoryLabel(item.category)}</span>
-                    </div>
-                  </div>
 
-                  <div className="skills-progress">
-                    <span style={{ width: `${clamp(item.level)}%` }} />
-                  </div>
-                  <p>{clamp(item.level)}% proficiency</p>
-                </article>
-              ))}
+                    <div className="skills-progress">
+                      <span style={{ width: `${clamp(item.level)}%` }} />
+                    </div>
+                    <p>{clamp(item.level)}% proficiency</p>
+                  </article>
+                ))
+              ) : (
+                <p className="skills-empty">No theoretical skills available.</p>
+              )}
             </div>
           </section>
         </div>

@@ -30,12 +30,105 @@ const normalizeUrl = (value?: string) => {
 
 const carouselDelay = 3000;
 
+const EventCard = ({ event }: { event: EventItem }) => {
+  const [activeImageIndex, setActiveImageIndex] = useState(0);
+  const images = useMemo(
+    () => (event.imageUrls ?? []).map((url) => normalizeUrl(url)).filter(Boolean),
+    [event.imageUrls]
+  );
+
+  useEffect(() => {
+    setActiveImageIndex(0);
+  }, [images.length]);
+
+  useEffect(() => {
+    if (!images.length) return undefined;
+    const interval = window.setInterval(() => {
+      setActiveImageIndex((current) => (current + 1) % images.length);
+    }, carouselDelay);
+    return () => window.clearInterval(interval);
+  }, [images.length]);
+
+  const activeImage = images[activeImageIndex];
+
+  return (
+    <article className="event-card">
+      <div className="event-card__media">
+        {activeImage ? (
+          <img src={activeImage} alt={event.name} className="event-card__image" loading="lazy" />
+        ) : (
+          <div className="event-card__image event-card__image--empty">Events</div>
+        )}
+
+        <div className="event-card__overlay">
+          <span className="event-card__badge">{event.type?.trim() || 'Event'}</span>
+          <span className="event-card__badge event-card__badge--count">
+            {(images.length ?? 0)} image{images.length === 1 ? '' : 's'}
+          </span>
+        </div>
+      </div>
+
+      <div className="event-card__body">
+        <div className="event-card__topline">
+          <span className="event-card__date">{formatDate(event.date || event.createdAt)}</span>
+          {event.location ? <span className="event-card__location">{event.location}</span> : null}
+        </div>
+
+        <h2 className="event-card__title">{event.name}</h2>
+        <p className="event-card__description">{event.description}</p>
+
+        <div className="event-card__chips">
+          {(event.skills ?? []).length > 0 ? (
+            event.skills!.map((skill) => (
+              <span key={skill} className="event-chip">
+                {skill}
+              </span>
+            ))
+          ) : (
+            <span className="event-chip event-chip--muted">No skills listed</span>
+          )}
+        </div>
+
+        {images.length > 0 ? (
+          <div className="event-card__gallery">
+            {images.slice(0, 4).map((image, index) => (
+              <button
+                key={`${image}-${index}`}
+                type="button"
+                className={`event-gallery-thumb ${index === activeImageIndex ? 'event-gallery-thumb--active' : ''}`}
+                onClick={() => setActiveImageIndex(index)}
+              >
+                <img src={image} alt={`${event.name} preview ${index + 1}`} loading="lazy" />
+              </button>
+            ))}
+          </div>
+        ) : null}
+
+        <div className="event-card__links">
+          {event.certificateUrls?.length ? (
+            <a
+              href={normalizeUrl(event.certificateUrls[0])}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="event-button event-button--primary"
+            >
+              View Certificate
+            </a>
+          ) : (
+            <span className="event-button event-button--disabled">Certificate unavailable</span>
+          )}
+
+          <span className="event-button event-button--secondary">{activeImage ? 'Carousel active' : 'No carousel image'}</span>
+        </div>
+      </div>
+    </article>
+  );
+};
+
 export function EventsPage() {
   const [events, setEvents] = useState<EventItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const [activeEventIndex, setActiveEventIndex] = useState(0);
-  const [activeImageIndex, setActiveImageIndex] = useState(0);
 
   useEffect(() => {
     let active = true;
@@ -65,20 +158,6 @@ export function EventsPage() {
     };
   }, []);
 
-  useEffect(() => {
-    if (!events.length) return undefined;
-
-    const interval = window.setInterval(() => {
-      setActiveImageIndex((current) => {
-        const currentImages = events[activeEventIndex]?.imageUrls ?? [];
-        if (!currentImages.length) return 0;
-        return (current + 1) % currentImages.length;
-      });
-    }, carouselDelay);
-
-    return () => window.clearInterval(interval);
-  }, [events, activeEventIndex]);
-
   const stats = useMemo(
     () => [
       { label: 'Events', value: String(events.length).padStart(2, '0') },
@@ -96,9 +175,7 @@ export function EventsPage() {
     );
   }
 
-  const currentEvent = events[activeEventIndex];
-  const currentImage = currentEvent?.imageUrls?.[activeImageIndex];
-  const currentImages = currentEvent?.imageUrls ?? [];
+  const previewEvent = events[0];
 
   return (
     <section className="events-page">
@@ -124,84 +201,21 @@ export function EventsPage() {
           <div className="events-hero__panel">
             <div className="events-hero__panel-inner">
               <span className="events-pill">Carousel preview</span>
-              <strong>{currentEvent?.name || 'No events available'}</strong>
-              <p>{currentEvent?.description || 'Event details will appear here.'}</p>
+              <strong>{previewEvent?.name || 'No events available'}</strong>
+              <p>{previewEvent?.description || 'Event details will appear here.'}</p>
             </div>
           </div>
         </header>
 
         {error ? <p className="events-page__error">{error}</p> : null}
 
-        {currentEvent ? (
-          <article className="event-card">
-            <div className="event-card__media">
-              {currentImage ? (
-                <img src={currentImage} alt={currentEvent.name} className="event-card__image" loading="lazy" />
-              ) : (
-                <div className="event-card__image event-card__image--empty">Events</div>
-              )}
-
-              <div className="event-card__overlay">
-                <span className="event-card__badge">{currentEvent.type?.trim() || 'Event'}</span>
-                <span className="event-card__badge event-card__badge--count">
-                  {currentImages.length} image{currentImages.length === 1 ? '' : 's'}
-                </span>
-              </div>
-            </div>
-
-            <div className="event-card__body">
-              <div className="event-card__topline">
-                <span className="event-card__date">{formatDate(currentEvent.date || currentEvent.createdAt)}</span>
-                {currentEvent.location ? <span className="event-card__location">{currentEvent.location}</span> : null}
-              </div>
-
-              <h2 className="event-card__title">{currentEvent.name}</h2>
-              <p className="event-card__description">{currentEvent.description}</p>
-
-              <div className="event-card__chips">
-                {(currentEvent.skills ?? []).length > 0 ? (
-                  currentEvent.skills!.map((skill) => (
-                    <span key={skill} className="event-chip">
-                      {skill}
-                    </span>
-                  ))
-                ) : (
-                  <span className="event-chip event-chip--muted">No skills listed</span>
-                )}
-              </div>
-
-              <div className="event-card__gallery">
-                {currentImages.slice(0, 4).map((image, index) => (
-                  <button
-                    key={`${image}-${index}`}
-                    type="button"
-                    className={`event-gallery-thumb ${index === activeImageIndex ? 'event-gallery-thumb--active' : ''}`}
-                    onClick={() => setActiveImageIndex(index)}
-                  >
-                    <img src={image} alt={`${currentEvent.name} preview ${index + 1}`} loading="lazy" />
-                  </button>
-                ))}
-              </div>
-
-              <div className="event-card__links">
-                {currentEvent.certificateUrls?.length ? (
-                  <a
-                    href={normalizeUrl(currentEvent.certificateUrls[0])}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="event-button event-button--primary"
-                  >
-                    View Certificate
-                  </a>
-                ) : (
-                  <span className="event-button event-button--disabled">Certificate unavailable</span>
-                )}
-
-                <span className="event-button event-button--secondary">{currentImage ? 'Carousel active' : 'No carousel image'}</span>
-              </div>
-            </div>
-          </article>
-        ) : null}
+        <div className="events-page__list">
+          {events.length > 0 ? (
+            events.map((event) => <EventCard key={event._id} event={event} />)
+          ) : (
+            <p className="events-page__empty">No events available.</p>
+          )}
+        </div>
       </div>
     </section>
   );

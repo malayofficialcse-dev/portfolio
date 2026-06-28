@@ -1032,6 +1032,98 @@ select,
   gap: 10px;
 }
 
+.project-card__carousel-controls {
+  position: absolute;
+  inset: auto 18px 18px;
+  display: flex;
+  justify-content: space-between;
+  width: calc(100% - 36px);
+  pointer-events: none;
+}
+
+.project-card__carousel-button {
+  pointer-events: auto;
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.9);
+  color: var(--text);
+  font-size: 1.25rem;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.16);
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.project-card__carousel-button:hover {
+  transform: translateY(-1px);
+  background: rgba(255, 255, 255, 1);
+}
+
+.project-card__slide {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.project-card__slide img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  transition: transform 0.6s ease, opacity 0.6s ease;
+}
+
+.project-card__image--current {
+  opacity: 1;
+  transform: translateX(0) translateY(0);
+  z-index: 1;
+}
+
+.project-card__image--next {
+  opacity: 0;
+  z-index: 2;
+}
+
+.project-card__slide.left-to-right .project-card__image--next {
+  transform: translateX(-100%);
+}
+
+.project-card__slide.left-to-right .project-card__image--next.transitioning {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.project-card__slide.right-to-left .project-card__image--next {
+  transform: translateX(100%);
+}
+
+.project-card__slide.right-to-left .project-card__image--next.transitioning {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.project-card__slide.top-to-bottom .project-card__image--next {
+  transform: translateY(-100%);
+}
+
+.project-card__slide.top-to-bottom .project-card__image--next.transitioning {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.project-card__slide.bottom-to-top .project-card__image--next {
+  transform: translateY(100%);
+}
+
+.project-card__slide.bottom-to-top .project-card__image--next.transitioning {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 .project-card__pill {
   display: inline-flex;
   align-items: center;
