@@ -1,7 +1,18 @@
 import { NavLink, Outlet } from 'react-router-dom';
+import { useState } from 'react';
 import { publicNav, adminNav } from '@/data/siteData';
 
 export function Layout() {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  const toggleMobileMenu = () => {
+    setMobileMenuOpen(!mobileMenuOpen);
+  };
+
+  const closeMobileMenu = () => {
+    setMobileMenuOpen(false);
+  };
+
   return (
     <div className="app-shell">
 
@@ -45,7 +56,47 @@ export function Layout() {
               </NavLink>
             ))}
           </div>
+
+          {/* Hamburger Button */}
+          <button
+            className={`ms-hamburger ${mobileMenuOpen ? 'active' : ''}`}
+            onClick={toggleMobileMenu}
+            aria-label="Toggle navigation menu"
+          >
+            <span />
+            <span />
+            <span />
+          </button>
         </div>
+
+        {/* Mobile Menu */}
+        {mobileMenuOpen && (
+          <div className="ms-mobile-menu">
+            <nav className="ms-mobile-nav" aria-label="Mobile navigation">
+              {publicNav.map(item => (
+                <NavLink
+                  key={item.to}
+                  to={item.to}
+                  className={({ isActive }) => `ms-mobile-nav__link${isActive ? ' active' : ''}`}
+                  onClick={closeMobileMenu}
+                >
+                  {item.label}
+                </NavLink>
+              ))}
+              <div className="ms-mobile-nav__divider" />
+              {adminNav.slice(0, 2).map(item => (
+                <NavLink
+                  key={item.to}
+                  to={item.to}
+                  className={({ isActive }) => `ms-mobile-nav__link${isActive ? ' active' : ''}`}
+                  onClick={closeMobileMenu}
+                >
+                  {item.label}
+                </NavLink>
+              ))}
+            </nav>
+          </div>
+        )}
       </header>
 
       <main className="main-content">

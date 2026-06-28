@@ -188,6 +188,85 @@ select,
   color: #0078d4;
 }
 
+/* Hamburger Button */
+.ms-hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  width: 40px;
+  height: 40px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  margin-left: auto;
+}
+
+.ms-hamburger span {
+  width: 24px;
+  height: 2px;
+  background-color: #1a1a1a;
+  border-radius: 1px;
+  transition: all 0.3s ease;
+  display: block;
+}
+
+.ms-hamburger.active span:nth-child(1) {
+  transform: rotate(45deg) translate(10px, 10px);
+}
+
+.ms-hamburger.active span:nth-child(2) {
+  opacity: 0;
+}
+
+.ms-hamburger.active span:nth-child(3) {
+  transform: rotate(-45deg) translate(7px, -7px);
+}
+
+/* Mobile Menu */
+.ms-mobile-menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: #fff;
+  border-bottom: 1px solid #e5e5e5;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+}
+
+.ms-mobile-nav {
+  display: flex;
+  flex-direction: column;
+  padding: 12px 0;
+}
+
+.ms-mobile-nav__link {
+  display: block;
+  padding: 12px 20px;
+  color: #1a1a1a;
+  text-decoration: none;
+  font-size: 0.9rem;
+  border-left: 3px solid transparent;
+  transition: all 0.2s;
+}
+
+.ms-mobile-nav__link:hover,
+.ms-mobile-nav__link.active {
+  background: #f0f6fb;
+  color: #0078d4;
+  border-left-color: #0078d4;
+}
+
+.ms-mobile-nav__divider {
+  height: 1px;
+  background: #e5e5e5;
+  margin: 8px 0;
+}
+
 /* Backward-compat stubs so other pages' .nav-link etc. still render */
 .nav-link,
 .nav-link-soft,
@@ -4838,11 +4917,27 @@ select,
     display: none;
   }
 
+  .ms-hamburger {
+    display: flex;
+  }
+
+  .ms-mobile-menu {
+    display: block;
+  }
+
   .ms-topbar__actions {
     margin-left: auto;
     gap: 6px;
     flex-wrap: wrap;
     justify-content: flex-end;
+  }
+
+  .ms-hamburger {
+    display: flex;
+  }
+
+  .ms-mobile-menu {
+    display: block;
   }
 
   .ms-footer__inner {
@@ -4881,6 +4976,18 @@ select,
   .ms-topbar__name {
     font-size: 0.82rem;
     max-width: 120px;
+  }
+
+  .ms-hamburger {
+    display: flex;
+  }
+
+  .ms-mobile-menu {
+    display: block;
+  }
+
+  .ms-topbar__actions {
+    display: none;
   }
 }
 
