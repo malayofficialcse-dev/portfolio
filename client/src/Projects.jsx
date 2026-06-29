@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import axios from "axios";
 
 const PROJECTS_API =
@@ -19,13 +19,15 @@ const directions = [
 ];
 
 const ProjectCard = ({ project }) => {
+  const transitionTimerRef = useRef(null);
   const [activeImageIndex, setActiveImageIndex] = useState(0);
   const [nextImageIndex, setNextImageIndex] = useState(null);
   const [isPaused, setIsPaused] = useState(false);
   const [isTransitioning, setIsTransitioning] = useState(false);
-  const [slideDirection] = useState(
+  const [slideDirection, setSlideDirection] = useState(
     () => directions[Math.floor(Math.random() * directions.length)]
   );
+  const [fullImageIndex, setFullImageIndex] = useState(null);
 
   const images = useMemo(
     () => (project.imageUrls ?? []).filter(Boolean),
@@ -36,26 +38,39 @@ const ProjectCard = ({ project }) => {
   const nextImage = nextImageIndex !== null ? images[nextImageIndex] : null;
 
   useEffect(() => {
+    clearTransitionTimer();
     setActiveImageIndex(0);
     setNextImageIndex(null);
     setIsTransitioning(false);
   }, [images.length]);
 
-  const startTransition = (targetIndex) => {
+  useEffect(() => clearTransitionTimer, []);
+
+  const clearTransitionTimer = () => {
+    if (transitionTimerRef.current) {
+      window.clearTimeout(transitionTimerRef.current);
+      transitionTimerRef.current = null;
+    }
+  };
+
+  const startTransition = (targetIndex, direction = "right-to-left") => {
     if (targetIndex === activeImageIndex || imageCount <= 1) return;
+    clearTransitionTimer();
+    setSlideDirection(direction);
     setNextImageIndex(targetIndex);
     setIsTransitioning(true);
-    window.setTimeout(() => {
+    transitionTimerRef.current = window.setTimeout(() => {
       setActiveImageIndex(targetIndex);
       setNextImageIndex(null);
       setIsTransitioning(false);
-    }, 600);
+      transitionTimerRef.current = null;
+    }, 900);
   };
 
   useEffect(() => {
     if (isPaused || imageCount <= 1) return undefined;
     const interval = window.setInterval(() => {
-      startTransition((activeImageIndex + 1) % imageCount);
+      startTransition((activeImageIndex + 1) % imageCount, "right-to-left");
     }, carouselDelay);
     return () => window.clearInterval(interval);
   }, [imageCount, isPaused, activeImageIndex]);
@@ -111,24 +126,64 @@ const ProjectCard = ({ project }) => {
           </span>
         </div>
 
-        {imageCount > 1 ? (
-          <div className="project-card__carousel-controls">
-            <button
-              type="button"
-              className="project-card__carousel-button"
-              onClick={() => startTransition((activeImageIndex - 1 + imageCount) % imageCount)}
-              aria-label="Previous project image"
-            >
-              ‹
-            </button>
-            <button
-              type="button"
-              className="project-card__carousel-button"
-              onClick={() => startTransition((activeImageIndex + 1) % imageCount)}
-              aria-label="Next project image"
-            >
-              ›
-            </button>
+        {currentImage ? (
+          <>
+            {imageCount > 1 ? (
+              <div className="project-card__carousel-controls">
+                <button
+                  type="button"
+                  className="project-card__carousel-button"
+                  onClick={() => startTransition((activeImageIndex - 1 + imageCount) % imageCount, "left-to-right")}
+                  aria-label="Previous project image"
+                >
+                  ‹
+                </button>
+                <button
+                  type="button"
+                  className="project-card__carousel-button"
+                  onClick={() => startTransition((activeImageIndex + 1) % imageCount, "right-to-left")}
+                  aria-label="Next project image"
+                >
+                  ›
+                </button>
+              </div>
+            ) : null}
+
+            <div className="project-card__image-actions">
+              <button
+                type="button"
+                className="project-card__image-button"
+                onClick={() => setFullImageIndex(activeImageIndex)}
+              >
+                View full image
+              </button>
+            </div>
+          </>
+        ) : null}
+
+        {fullImageIndex !== null ? (
+          <div
+            className="project-card__modal-overlay"
+            role="dialog"
+            aria-modal="true"
+            onClick={() => setFullImageIndex(null)}
+          >
+            <div className="project-card__modal" onClick={(event) => event.stopPropagation()}>
+              <button
+                type="button"
+                className="project-card__modal-close"
+                onClick={() => setFullImageIndex(null)}
+                aria-label="Close full image"
+              >
+                ×
+              </button>
+              <img
+                src={images[fullImageIndex]}
+                alt={`${project.title} full view`}
+                className="project-card__modal-image"
+                loading="lazy"
+              />
+            </div>
           </div>
         ) : null}
       </div>
