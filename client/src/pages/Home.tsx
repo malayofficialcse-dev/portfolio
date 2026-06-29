@@ -389,17 +389,17 @@ opacity:.15;
       body: bio,
       cta: { label: 'View Projects', to: '/projects' },
       ctaAlt: { label: 'Download Resume', to: profile?.resume ? fmtLink(profile.resume) : '/certificates' },
-      bg: 'linear-gradient(135deg, #f5f0e8 0%, #ede8dc 45%, #e4ddd0 100%)',
+      bg: 'linear-gradient(135deg, #f7fbff 0%, #e2efff 50%, #d5e7fb 100%)',
       light: true,
     },
     {
       eyebrow: 'Malay Maity',
       heading: 'Full Stack Software Engineer',
       sub: profile?.location ?? 'Kolkata, West Bengal',
-      body: 'Full Stack Software Engineer passionate about designing scalable,cloud-native applications using React, Node.js, Microsoft Azure, Kubernetes, Docker and modern DevOps practices.I enjoy transforming complex business requirements into secure,maintainable and high-performance software solutions.',
+      body: 'Full Stack Software Engineer passionate about designing scalable, cloud-native applications using React, Node.js, Microsoft Azure, Kubernetes, Docker and modern DevOps practices. I enjoy transforming complex business requirements into secure, maintainable, high-performance software solutions.',
       cta: { label: 'Get in touch', to: profile?.email ? (`mailto:${profile.email}` as any) : '/admin/login' },
       ctaAlt: { label: 'Explore skills', to: '/skills' },
-      bg: 'linear-gradient(135deg, #eef3f8 0%, #e6edf5 40%, #dde8f0 100%)',
+      bg: 'linear-gradient(135deg, #f3f7ff 0%, #dbe8f9 50%, #c9dff4 100%)',
       light: true,
     },
   ];
@@ -456,6 +456,34 @@ opacity:.15;
             <h1 className="ms-hero__heading">{cur.heading}</h1>
             <p className="ms-hero__sub">{cur.sub}</p>
             <p className="ms-hero__body">{cur.body}</p>
+
+            <div className="ms-hero__summary">
+              <div className="ms-hero__summary-item">
+                <strong>{projects.length}</strong>
+                <span>projects delivered</span>
+              </div>
+              <div className="ms-hero__summary-item">
+                <strong>{experiences.length}</strong>
+                <span>professional experiences</span>
+              </div>
+              <div className="ms-hero__summary-item">
+                <strong>{skills.length}</strong>
+                <span>technical skills</span>
+              </div>
+              <div className="ms-hero__summary-item">
+                <strong>{certs.length}</strong>
+                <span>certifications earned</span>
+              </div>
+            </div>
+
+            <div className="ms-hero__tags">
+              {(topSkills.slice(0, 6)).map(skill => (
+                <span key={skill._id ?? skill.name} className="ms-hero__tag">
+                  {skill.name}
+                </span>
+              ))}
+            </div>
+
             <div className="ms-hero__actions">
               <Link to={cur.cta.to} className="ms-btn ms-btn--primary">{cur.cta.label}</Link>
               <Link to={cur.ctaAlt.to} className={isLight ? 'ms-btn ms-btn--outline-dark' : 'ms-btn ms-btn--ghost'}>{cur.ctaAlt.label}</Link>
