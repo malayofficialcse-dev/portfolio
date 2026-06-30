@@ -23,6 +23,7 @@ import { EventsAdminPage } from './pages/admin/EventsAdminPage';
 import { CertificatesAdminPage } from './pages/admin/CertificatesAdminPage';
 import { ExperiencesAdminPage } from './pages/admin/ExperiencesAdminPage';
 import { AcademicsAdminPage } from './pages/admin/AcademicsAdminPage';
+import { QuickLinksAdminPage } from './pages/admin/QuickLinksAdminPage';
 
 import Certificates from './Certificates.jsx';
 export default function App() {
@@ -55,6 +56,7 @@ export default function App() {
         <Route path="/admin/certificates" element={<ProtectedRoute element={<CertificatesAdminPage />} />} />
         <Route path="/admin/experiences" element={<ProtectedRoute element={<ExperiencesAdminPage />} />} />
         <Route path="/admin/academics" element={<ProtectedRoute element={<AcademicsAdminPage />} />} />
+        <Route path="/admin/quick-links" element={<ProtectedRoute element={<QuickLinksAdminPage />} />} />
       </Route>
       <Route path="*" element={<NotFound />} />
     </Routes>

@@ -20,6 +20,7 @@ export function AdminSidebar() {
     { to: '/admin/certificates', label: 'Certificates' },
     { to: '/admin/experiences', label: 'Experiences' },
     { to: '/admin/academics', label: 'Academics' },
+    { to: '/admin/quick-links', label: 'Quick Links' },
   ];
 
   return (

@@ -42,6 +42,8 @@ import {
   SiLinux,
   SiTypescript,
 } from "react-icons/si";
+import * as FaIcons from 'react-icons/fa';
+import * as SiIcons from 'react-icons/si';
 
 /* ─── Type definitions ──────────────────────────────────────────── */
 
@@ -130,7 +132,9 @@ type SkillsRecord = {
 
 /* ─── API base ──────────────────────────────────────────────────── */
 
-const API = 'https://mmport-b2fzejc8h9cwfffb.centralindia-01.azurewebsites.net/api';
+const API = import.meta.env.VITE_BACKEND_URL 
+  ? `${import.meta.env.VITE_BACKEND_URL}/api`
+  : 'https://mmport-b2fzejc8h9cwfffb.centralindia-01.azurewebsites.net/api';
 
 /* ─── Helpers ───────────────────────────────────────────────────── */
 
@@ -186,16 +190,15 @@ function CarouselDots({ count, idx, setIdx }: { count: number; idx: number; setI
 //   { to: '/academic', icon: '🎓', label: 'GeeksforGeeks' },
 // ];
 
-const quickLinks = [
-  { to: "/projects", icon: <FaGithub />, label: "GitHub", text: "900+ Contributions" },
-  { to: "/skills", icon: <FaLinkedin />, label: "LinkedIn", text: "1.5k+ Connections" },
-  { to: "/certificates", icon: <SiGooglescholar />, label: "Google Scholar", text: "9+ Publications" },
-  { to: "/research", icon: <SiResearchgate />, label: "Research Gate", text: "60+ Publications" },
-  { to: "/books", icon: <SiOrcid />, label: "ORCID", text: "0211-0000-0000" },
-  { to: "/experiences", icon: <FaDocker />, label: "DockerHub", text: "10+ Images" },
-  { to: "/events", icon: <SiLeetcode />, label: "LeetCode", text: "Top 22%" },
-  { to: "/academic", icon: <SiGeeksforgeeks />, label: "GeeksforGeeks", text: "Top 8%" },
-];
+const renderIcon = (iconName: string) => {
+  const FaIcon = (FaIcons as any)[iconName];
+  if (FaIcon) return <FaIcon />;
+  
+  const SiIcon = (SiIcons as any)[iconName];
+  if (SiIcon) return <SiIcon />;
+  
+  return <FaIcons.FaGlobe />;
+};
 /* ═══════════════════════════════════════════════════════════════
    MAIN COMPONENT
 ═══════════════════════════════════════════════════════════════ */
@@ -336,6 +339,7 @@ opacity:.15;
   const [research, setResearch] = useState<ResearchPaper[]>([]);
   const [experiences, setExperiences] = useState<ExperienceItem[]>([]);
   const [skills, setSkills] = useState<TechnicalSkill[]>([]);
+  const [quickLinks, setQuickLinks] = useState<any[]>([]);
 
   /* hero slide */
   const [heroSlide, setHeroSlide] = useState(0);
@@ -358,6 +362,7 @@ opacity:.15;
     axios.get(`${API}/research`).then(r => { if (m) setResearch(r.data ?? []); }).catch(console.error);
     axios.get(`${API}/experiences`).then(r => { if (m) setExperiences(r.data ?? []); }).catch(console.error);
     axios.get(`${API}/skills`).then(r => { if (m) setSkills(r.data?.[0]?.technicalSkills ?? []); }).catch(console.error);
+    axios.get(`${API}/quick-links`).then(r => { if (m) setQuickLinks(r.data ?? []); }).catch(console.error);
     return () => { m = false; };
   }, []);
 
@@ -420,7 +425,8 @@ opacity:.15;
   const resolveUrl = (url?: string) => {
     if (!url) return '';
     if (url.startsWith('http')) return url;
-    if (url.startsWith('/uploads')) return `https://mmport-b2fzejc8h9cwfffb.centralindia-01.azurewebsites.net${url}`;
+    const base = import.meta.env.VITE_BACKEND_URL || 'https://mmport-b2fzejc8h9cwfffb.centralindia-01.azurewebsites.net';
+    if (url.startsWith('/uploads')) return `${base}${url}`;
     return url;
   };
 
@@ -582,10 +588,33 @@ opacity:.15;
   }}
 > */}
 
+        <section className="ms-quick" style={{ borderTop: "1px solid #e5e7eb" }}>
+        <div className="ms-quick__inner">
+          {quickLinks.map(item => {
+            const isExternal = item.link.startsWith('http') || item.link.startsWith('//');
+            const iconComponent = renderIcon(item.icon);
 
+            if (isExternal) {
+              return (
+                <a key={item._id || item.link} href={item.link} target="_blank" rel="noopener noreferrer" className="ms-quick__item">
+                  <span className="ms-quick__icon">{iconComponent}</span>
+                  <span className="ms-quick__subtitle">{item.text}</span>
+                </a>
+              );
+            }
+
+            return (
+              <Link key={item._id || item.link} to={item.link} className="ms-quick__item">
+                <span className="ms-quick__icon">{iconComponent}</span>
+                <span className="ms-quick__subtitle">{item.text}</span>
+              </Link>
+            );
+          })}
+        </div>
+      </section>
 
       {/* ══════════ STATS STRIP ══════════ */}
-      <section className="home-stats-strip">
+      {/* <section className="home-stats-strip">
         <div className="home-stats-strip__inner">
           <div className="home-stat-item">
             <strong>{projects.length || '—'}</strong>
@@ -612,7 +641,7 @@ opacity:.15;
             <span>Technical Skills</span>
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* ══════════ PROJECTS CAROUSEL ══════════ */}
       {projects.length > 0 && (
@@ -671,6 +700,37 @@ opacity:.15;
           <CarouselDots count={projects.length} idx={projCar.idx} setIdx={projCar.setIdx} />
         </section>
       )}
+
+
+
+      {/* <section className="home-stats-strip">
+        <div className="home-stats-strip__inner">
+          <div className="home-stat-item">
+            <strong>{projects.length || '—'}</strong>
+            <span>Projects Built</span>
+          </div>
+          <div className="home-stat-item">
+            <strong>{certs.length || '—'}</strong>
+            <span>Certifications</span>
+          </div>
+          <div className="home-stat-item">
+            <strong>{research.length || '—'}</strong>
+            <span>Research Papers</span>
+          </div>
+          <div className="home-stat-item">
+            <strong>{books.length || '—'}</strong>
+            <span>Publications</span>
+          </div>
+          <div className="home-stat-item">
+            <strong>{experiences.length || '—'}</strong>
+            <span>Work Experiences</span>
+          </div>
+          <div className="home-stat-item">
+            <strong>{skills.length || '—'}</strong>
+            <span>Technical Skills</span>
+          </div>
+        </div>
+      </section> */}
 
 
       <div
@@ -1204,15 +1264,32 @@ opacity:.15;
       )}
 
 
-      <section className="ms-quick" style={{ borderTop: "1px solid #e5e7eb" }}>
-        <div className="ms-quick__inner">
-          {quickLinks.map(item => (
-            <Link key={item.to} to={item.to} className="ms-quick__item">
-              <span className="ms-quick__icon">{item.icon}</span>
-              {/* <span className="ms-quick__label">{item.label}</span> */}
-              <span className="ms-quick__subtitle">{item.text}</span>
-            </Link>
-          ))}
+      <section className="home-stats-strip">
+        <div className="home-stats-strip__inner">
+          <div className="home-stat-item">
+            <strong>{projects.length || '—'}</strong>
+            <span>Projects Built</span>
+          </div>
+          <div className="home-stat-item">
+            <strong>{certs.length || '—'}</strong>
+            <span>Certifications</span>
+          </div>
+          <div className="home-stat-item">
+            <strong>{research.length || '—'}</strong>
+            <span>Research Papers</span>
+          </div>
+          <div className="home-stat-item">
+            <strong>{books.length || '—'}</strong>
+            <span>Publications</span>
+          </div>
+          <div className="home-stat-item">
+            <strong>{experiences.length || '—'}</strong>
+            <span>Work Experiences</span>
+          </div>
+          <div className="home-stat-item">
+            <strong>{skills.length || '—'}</strong>
+            <span>Technical Skills</span>
+          </div>
         </div>
       </section>
 

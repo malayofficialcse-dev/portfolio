@@ -18,6 +18,7 @@ import certificateRoutes from './routes/certificateRoutes';
 import experienceRoutes from './routes/experienceRoutes';
 import academicRoutes from './routes/academicRoutes';
 import eventRoutes from './routes/eventRoutes';
+import quickLinkRoutes from './routes/quickLinkRoutes';
 
 const app = express();
 
@@ -74,6 +75,7 @@ app.use('/api/certificates', certificateRoutes);
 app.use('/api/experiences', experienceRoutes);
 app.use('/api/academics', academicRoutes);
 app.use('/api/events', eventRoutes);
+app.use('/api/quick-links', quickLinkRoutes);
 
 // Global Error Handler for undefined routes
 app.use((req, res, next) => {
