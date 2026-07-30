@@ -43,8 +43,8 @@ export default function App() {
         <Route path="/cert" element={<Certificates />} />
         
 
-        <Route path="/admin" element={<Navigate to="/admin/dashboard" replace />} />
-        <Route path="/admin/login" element={<LoginPage />} />
+        {/* <Route path="/admin" element={<Navigate to="/admin/dashboard" replace />} />
+        <Route path="/admin/login" element={<LoginPage />} /> */}
         {/* <Route path="/admin/register" element={<RegisterPage />} /> */}
         <Route path="/admin/dashboard" element={<ProtectedRoute element={<DashboardPage />} />} />
         <Route path="/admin/profile" element={<ProtectedRoute element={<ProfilePage />} />} />
