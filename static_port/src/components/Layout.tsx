@@ -28,7 +28,7 @@ export function Layout() {
               <span style={{ background: '#00a4ef' }} />
               <span style={{ background: '#ffb900' }} />
             </div> */}
-            <span className="ms-topbar__name">Malay Maity  | </span>
+            <span className="ms-topbar__name">Malay Maity</span>
           </div>
 
           {/* Primary Nav */}
@@ -45,7 +45,7 @@ export function Layout() {
           </nav>
 
           {/* Right actions */}
-          <div className="ms-topbar__actions">
+          {/* <div className="ms-topbar__actions">
             {adminNav.slice(0, 2).map(item => (
               <NavLink
                 key={item.to}
@@ -55,7 +55,7 @@ export function Layout() {
                 {item.label}
               </NavLink>
             ))}
-          </div>
+          </div> */}
 
           {/* Hamburger Button */}
           <button
@@ -138,13 +138,13 @@ export function Layout() {
             </div>
 
             {/* More column */}
-            <div className="ms-footer__col">
+            {/* <div className="ms-footer__col">
               <h3>More</h3>
               {publicNav.slice(5).map(item => (
                 <NavLink key={item.to} to={item.to} className="ms-footer__link">{item.label}</NavLink>
               ))}
               <NavLink to="/admin/dashboard" className="ms-footer__link">Admin</NavLink>
-            </div>
+            </div> */}
 
             {/* Contact column */}
             <div className="ms-footer__col">
