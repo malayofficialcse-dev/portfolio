@@ -1,5 +1,51 @@
 export const eventsData = [
   {
+    "_id": "6c9d4a230d6528bc9012de56",
+    "name": "React Kolkata Meetup: Aug’26 Edition",
+    "type": "Meetup",
+    "description": "Attended the React Kolkata Meetup at Techno India University featuring deep-dive technical sessions on modern React architecture, frontend engineering patterns, and community networking.",
+    "location": "Techno India University, Kolkata",
+    "date": "2026-08-23T07:30:00.000Z",
+    "skills": [
+      "React",
+      "JavaScript",
+      "Frontend Architecture",
+      "Web Development"
+    ],
+    "certificateUrls": [],
+    "imageUrls": [
+      "https://res.cloudinary.com/dmh0ivb3o/image/upload/v1790607548/WhatsApp_Image_2026-09-28_at_8.24.38_PM.jpg",
+      "https://res.cloudinary.com/dmh0ivb3o/image/upload/v1790607548/WhatsApp_Image_2026-09-28_at_8.24.38_PM_1.jpg",
+      "https://res.cloudinary.com/dmh0ivb3o/image/upload/v1790607548/WhatsApp_Image_2026-09-28_at_8.27.46_PM.jpg"
+    ],
+    "createdAt": "2026-08-23T13:00:00.000Z",
+    "updatedAt": "2026-08-23T13:00:00.000Z",
+    "__v": 0
+  },
+  {
+    "_id": "6b8f3e129c5417ab8901cd45",
+    "name": "Build with AI - GDG Kolkata",
+    "type": "Workshop",
+    "description": "Participated in the Build with AI event organized by Google Developer Group (GDG) Kolkata, exploring Gemini APIs, Google Cloud AI tools, and hands-on generative AI developer sessions.",
+    "location": "Kolkata",
+    "date": "2026-05-18T04:30:00.000Z",
+    "skills": [
+      "Generative AI",
+      "Google Cloud",
+      "Machine Learning",
+      "AI APIs"
+    ],
+    "certificateUrls": [],
+    "imageUrls": [
+      "https://res.cloudinary.com/dmh0ivb3o/image/upload/v1790607548/WhatsApp_Image_2026-09-28_at_8.27.47_PM.jpg",
+      "https://res.cloudinary.com/dmh0ivb3o/image/upload/v1790607549/WhatsApp_Image_2026-09-28_at_8.27.47_PM_1.jpg",
+      "https://res.cloudinary.com/dmh0ivb3o/image/upload/v1790607548/WhatsApp_Image_2026-09-28_at_8.27.46_PM.jpg"
+    ],
+    "createdAt": "2026-05-18T10:00:00.000Z",
+    "updatedAt": "2026-05-18T10:00:00.000Z",
+    "__v": 0
+  },
+  {
     "_id": "695a91191036567577cfe530",
     "name": "SMART INDIA HACKATHON ",
     "type": "Hackathon ",

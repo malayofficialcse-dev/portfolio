@@ -7,7 +7,7 @@ const DEFAULT_QUICK_LINKS = [
   { name: "Google Scholar", icon: "SiGooglescholar", text: "9+ Publications", link: "/certificates", order: 2 },
   { name: "Research Gate", icon: "SiResearchgate", text: "60+ Publications", link: "/research", order: 3 },
   { name: "ORCID", icon: "SiOrcid", text: "0211-0000-0000", link: "/books", order: 4 },
-  { name: "DockerHub", icon: "FaDocker", text: "10+ Images", link: "/experiences", order: 5 },
+  { name: "DockerHub", icon: "FaDocker", text: "10+ Images", link: "https://hub.docker.com/u/malaymaity", order: 5 },
   { name: "LeetCode", icon: "SiLeetcode", text: "Top 22%", link: "/events", order: 6 },
   { name: "GeeksforGeeks", icon: "SiGeeksforgeeks", text: "Top 8%", link: "/academic", order: 7 }
 ];
